@@ -23,12 +23,12 @@ export const createUser = createAsyncThunk(
 
 const initialState = {
   payload: {
-    firstName: "Remilekun",
-    lastName: "Elijah",
-    email: "remilekunelijah97@gmail.com",
-    country: "Nigeria",
-    gender: "male",
-    purpose: "New Year resolution list",
+    firstName: "",
+    lastName: "",
+    email: "",
+    country: "",
+    gender: "",
+    purpose: "",
   },
   branches: [],
   loading: false,
