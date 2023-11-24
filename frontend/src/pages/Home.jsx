@@ -98,7 +98,7 @@ const Home = () => {
               </div>
 
               <div>
-                <img className="w-full" src="/public/giftbox.png" alt="" />
+                <img className="w-full" src="/public/giftbox.webp" alt="" />
               </div>
             </div>
           </div>
