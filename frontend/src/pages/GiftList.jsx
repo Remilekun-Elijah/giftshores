@@ -29,6 +29,7 @@ import { vCreateUser } from "../utils/validators";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, getUserData } from "../features/userSlice";
 import { Link } from "react-router-dom";
+import NewNavBar from "../components/NewNavBar";
 
 const steps = [
   "Select master blaster campaign settings",
@@ -103,7 +104,8 @@ Giftshores
   console.log(whatsappUrl);
   return (
     <div className="md:h-screen bg-[#eee]">
-      <Navbar />
+      {/* <Navbar /> */}
+      <NewNavBar />
       <div className="flex items-center justify-center h-full my-16 md:mt-0">
         <Box className="flex flex-col h-full img md:shadow-xl" sx={responsiveCss}>
           <img

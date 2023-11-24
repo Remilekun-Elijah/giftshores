@@ -1,5 +1,5 @@
 import { Avatar, Box, Button } from "@mui/material";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 import gsap from "gsap";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
