@@ -24,7 +24,7 @@ const Home = () => {
               }}
             />
             <div>
-              <h1 className="lg:text-3xl md:text-2xl sm:text-lg text-lg uppercase">
+              <h1 className="lg:text-3xl md:text-2xl sm:text-lg font-[700] text-lg uppercase">
                 Creating gifts wish list
               </h1>
               <h1 className="lg:text-3xl md:text-2xl sm:text-lg text-lg uppercase">

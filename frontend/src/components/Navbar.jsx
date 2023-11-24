@@ -11,7 +11,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const pages = [{ name: "Create List", url: "/create-list" }];
 
@@ -25,12 +25,12 @@ const Navbar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
+  const { pathname } = useLocation();
   return (
     <AppBar
       position="fixed"
       sx={{
-        background: "linear-gradient(to right, purple, #E491E8)",
+        background: "purple",
         boxShadow: "none",
       }}
     >
@@ -58,52 +58,52 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            Giftshores
+            GIFTSHORES
           </Typography>
-          {/* </div> */}
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((p) => (
-                <MenuItem
-                  component={Link}
-                  to={p.url}
-                  key={p.name}
-                  onClick={handleCloseNavMenu}
-                >
-                  <Typography textAlign="center">{p.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          {/* <div className="flex items-center"> */}
+          {pathname === "/" && (
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                {pages.map((p) => (
+                  <MenuItem
+                    component={Link}
+                    to={p.url}
+                    key={p.name}
+                    onClick={handleCloseNavMenu}
+                  >
+                    <Typography textAlign="center">{p.name}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
           <Avatar
             src="/logo.png"
             alt=""
@@ -127,28 +127,36 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            Giftshores
+            GIFTSHORES
           </Typography>
           {/* </div> */}
 
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: { xs: "none", md: "flex", justifyContent: "flex-end" },
-            }}
-          >
-            {pages.map((p) => (
-              <Button
-                key={p.name}
-                LinkComponent={Link}
-                to={p.url}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {p.name}
-              </Button>
-            ))}
-          </Box>
+          {pathname === "/" && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex", justifyContent: "flex-end" },
+              }}
+            >
+              {pages.map((p) => (
+                <Button
+                  key={p.name}
+                  LinkComponent={Link}
+                  to={p.url}
+                  onClick={handleCloseNavMenu}
+                  className="shadow"
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    background: "purple",
+                  }}
+                >
+                  {p.name}
+                </Button>
+              ))}
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
