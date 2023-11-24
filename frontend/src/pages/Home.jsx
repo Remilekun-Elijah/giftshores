@@ -110,7 +110,7 @@ const Home = () => {
       <section class="py-10 bg-gray-50 sm:py-16 lg:py-24">
         <div class="grid grid-cols-1 mt-12 lg:mt-24 gap-y-12 md:grid-cols-3 gap-x-6">
           <div class="md:px-4 lg:px-10">
-            <img class="-rotate-1" src="/work.jpg" alt="" />
+            <img class="-rotate-1" src="/wavy_list.jpg" alt="" />
             <h3 class="mt-8 text-xl font-semibold leading-tight text-black">Card 1</h3>
             <p class="mt-4 text-base text-gray-600">
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
@@ -118,7 +118,7 @@ const Home = () => {
           </div>
 
           <div class="md:px-4 lg:px-10">
-            <img class="rotate-1" src="/work.jpg" alt="" />
+            <img class="rotate-1" src="/wish_list.png" alt="" />
             <h3 class="mt-8 text-xl font-semibold leading-tight text-black">Card 2</h3>
             <p class="mt-4 text-base text-gray-600">
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
@@ -126,7 +126,7 @@ const Home = () => {
           </div>
 
           <div class="md:px-4 lg:px-10">
-            <img class="-rotate-1" src="/work.jpg" alt="" />
+            <img class="-rotate-1" src="/mail_friends.png" alt="" />
             <h3 class="mt-8 text-xl font-semibold leading-tight text-black">Card 3</h3>
             <p class="mt-4 text-base text-gray-600">
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
@@ -185,128 +185,19 @@ const Home = () => {
         </div>
       </section>
 
-      <main classNameName="mt-16">
-        <div classNameName="text-center py-0 bg-[#eee]">
-          <div
-            style={{ borderBottom: "1px solid purple" }}
-            classNameName="flex shadow- items-center py-10 bg-white text-center justify-around flex-wrap lg:rounded-br-[100px] lg:rounded-bl-[100px] sm:rounded-br-[40px] sm:rounded-bl-[40px] rounded-bl-[30px] rounded-br-[30px]">
-            <Avatar
-              src="/wavy_list.jpg"
-              alt=""
-              sx={{
-                height: { lg: "100px", sm: "100px", xs: "50px" },
-                width: { md: "100px", sm: "100px", xs: "50px" },
-              }}
-            />
-            <div>
-              <h1 classNameName="lg:text-3xl md:text-2xl sm:text-lg font-[700] text-lg uppercase">
-                Creating gifts wish list
-              </h1>
-              <h1 classNameName="text-lg uppercase lg:text-3xl md:text-2xl sm:text-lg">
-                Just got easier
-              </h1>
-            </div>
-            <Avatar
-              src="/wavy_list.jpg"
-              alt=""
-              sx={{
-                height: { lg: "100px", sm: "100px", xs: "50px" },
-                width: { md: "100px", sm: "100px", xs: "50px" },
-              }}
-            />
-          </div>
-          <div classNameName="flex flex-col items-center px-3 py-10 mt-10 text-center">
-            <div classNameName="flex flex-wrap items-center justify-center gap-0 md:gap-10">
-              <img src="/wish_list.png" alt="" width={"300px"} height={"300px"} />
-              <div classNameName="text-lg">
-                <p>Create an amazing list of gifts you want</p>
-                <p>Copying the emails of friends you want to</p>
-                <p> send them to in a very easy and convenient way.</p>
-              </div>
-            </div>
+      {/* CTA  */}
+      <center classNameName="py-5">
+        <Button
+          component={Link}
+          to={"/create-list"}
+          size="large"
+          className="z-10 inline-flex items-center px-6 py-4 mt-8 font-semibold text-black transition-all duration-200 bg-yellow-300 rounded-full lg:mt-16 hover:bg-yellow-400 focus:bg-yellow-400"
+          variant="contained">
+          Create List
+        </Button>
 
-            <div classNameName="flex flex-wrap items-center justify-center gap-0 my-10 md:gap-10 md:my-0">
-              <div classNameName="order-1 text-lg md:order-none">
-                <p>Create an amazing list of gifts you want</p>
-                <p>Copying the emails of friends you want to</p>
-                <p> send them to in a very easy and convenient way.</p>
-              </div>
-              <img src="/mail_friends.png" alt="" width={"300px"} height={"300px"} />
-            </div>
-
-            <div classNameName="flex flex-wrap items-center justify-center gap-0 md:gap-10">
-              <img src="/gift_friend.png" alt="" width={"300px"} height={"300px"} />
-              <div classNameName="text-lg">
-                <p>Create an amazing list of gifts you want</p>
-                <p>Copying the emails of friends you want to</p>
-                <p> send them to in a very easy and convenient way.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <center classNameName="py-5">
-          <Button
-            component={Link}
-            to={"/create-list"}
-            size="large"
-            sx={{ background: "linear-gradient(to right, purple, #E491E8)" }}
-            color="error"
-            classNameName="z-10"
-            variant="contained">
-            Create List
-          </Button>
-        </center>
-        <section classNameName="bg-[#8D83B3] py-10 text-white text-center px-3">
-          <h2 classNameName="text-lg lg:text-3xl md:text-2xl sm:text-lg">
-            {" "}
-            What Users are saying
-          </h2>
-
-          <div classNameName="flex flex-wrap items-center justify-center mt-10">
-            <div classNameName="max-w-[400px] sm:mr-10">
-              <div classNameName="flex items-center">
-                <Avatar
-                  sx={{
-                    background: "linear-gradient(to right, purple, #E491E8)",
-                    border: "1px solid purple",
-                  }}>
-                  AO
-                </Avatar>
-                <p classNameName="ml-5 text-lg uppercase">Abayomi Oluga</p>
-              </div>
-              <Box sx={{ borderLeft: "2px solid purple", ml: 2.5 }}>
-                <p classNameName="py-5 ml-10 text-left">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod tenetur
-                  odio exercitationem libero voluptatibus impedit sapiente reiciendis non
-                  laudantium ut at facere incidunt perspiciatis, in quos temporibus?
-                  Error, fuga velit.
-                </p>
-              </Box>
-            </div>
-
-            <div classNameName="max-w-[400px] sm:mr-10">
-              <div classNameName="flex items-center">
-                <Avatar
-                  sx={{
-                    background: "linear-gradient(to right, purple, #E491E8)",
-                    border: "1px solid purple",
-                  }}>
-                  OO
-                </Avatar>
-                <p classNameName="ml-5 text-lg uppercase">Olumide Oluga</p>
-              </div>
-              <Box sx={{ borderLeft: "2px solid purple", ml: 2.5 }}>
-                <p classNameName="py-5 ml-10 text-left">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod tenetur
-                  odio exercitationem libero voluptatibus impedit sapiente reiciendis non
-                  laudantium ut at facere incidunt perspiciatis, in quos temporibus?
-                  Error, fuga velit.
-                </p>
-              </Box>
-            </div>
-          </div>
-        </section>
-      </main>
+        {/* end cta  */}
+      </center>
       <Footer />
     </div>
   );
