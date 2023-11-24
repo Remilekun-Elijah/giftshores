@@ -30,10 +30,9 @@ const Navbar = () => {
     <AppBar
       position="fixed"
       sx={{
-        background: "purple",
+        background: "#593C8F",
         boxShadow: "none",
-      }}
-    >
+      }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Avatar
@@ -56,8 +55,7 @@ const Navbar = () => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
-            }}
-          >
+            }}>
             GIFTSHORES
           </Typography>
 
@@ -69,8 +67,7 @@ const Navbar = () => {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
-                color="inherit"
-              >
+                color="inherit">
                 <MenuIcon />
               </IconButton>
               <Menu
@@ -89,15 +86,13 @@ const Navbar = () => {
                 onClose={handleCloseNavMenu}
                 sx={{
                   display: { xs: "block", md: "none" },
-                }}
-              >
+                }}>
                 {pages.map((p) => (
                   <MenuItem
                     component={Link}
                     to={p.url}
                     key={p.name}
-                    onClick={handleCloseNavMenu}
-                  >
+                    onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{p.name}</Typography>
                   </MenuItem>
                 ))}
@@ -125,8 +120,7 @@ const Navbar = () => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
-            }}
-          >
+            }}>
             GIFTSHORES
           </Typography>
           {/* </div> */}
@@ -136,8 +130,7 @@ const Navbar = () => {
               sx={{
                 flexGrow: 1,
                 display: { xs: "none", md: "flex", justifyContent: "flex-end" },
-              }}
-            >
+              }}>
               {pages.map((p) => (
                 <Button
                   key={p.name}
@@ -150,8 +143,7 @@ const Navbar = () => {
                     color: "white",
                     display: "block",
                     background: "purple",
-                  }}
-                >
+                  }}>
                   {p.name}
                 </Button>
               ))}
