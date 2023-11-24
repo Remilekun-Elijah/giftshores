@@ -474,10 +474,8 @@ Giftshores
 
                   <LoadingButton
                     {...{ loading }}
-                    LinkComponent={Link}
                     endIcon={<SendIcon />}
                     variant="text"
-                    to={whatsappUrl}
                     className="z-10"
                     sx={{
                       mt: "1em",
@@ -496,7 +494,18 @@ Giftshores
 
                 <Divider>OR</Divider>
                 <div className="flex justify-center mt-3">
-                  <Button variant="contained" color="success">
+                  <Button
+                    sx={{
+                      background:
+                        "linear-gradient(to right, darkgreen, #0DE815)",
+                    }}
+                    className="z-10"
+                    variant="contained"
+                    color="success"
+                    LinkComponent={Link}
+                    to={whatsappUrl}
+                    size="small"
+                  >
                     <Avatar src="./whatsapp.png" /> Share on WhatsApp
                   </Button>
                 </div>
