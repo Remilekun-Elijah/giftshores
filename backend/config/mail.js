@@ -40,10 +40,15 @@ exports.sendMail = async function (message) {
           if (err) {
             console.error(err);
             error("Failed to send mail");
-          } else
+            message.handleError()
+          } else{
+            message.handleSuccess()
             success("Email sent to:", info.messageId, "after failed trial ");
-        });
-      } else success("Email sent to:", infos.messageId);
+         }   });
+      } else {
+        message.handleSuccess()
+        success("Email sent to:", infos.messageId);
+      }
     });
   } catch (e) {
     throw new Error(

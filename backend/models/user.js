@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     email: String,
     country: String,
     password: String,
+    gender: String,
   },
   { timestamps: true }
 );
@@ -27,6 +28,10 @@ const giftSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    via: {
+      type: String,
+      default: "mail"
+    }
   },
   { timestamps: true }
 );

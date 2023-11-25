@@ -85,24 +85,39 @@ exports.createGifts = async (req, res, next) => {
 
 exports.sendGift = async (req, res, next) => {
   const { giftId } = req.params,
-    { recipients } = req.body;
+    { recipients, url } = req.body,
+    { type } = req.query
 
   const gift = await getGiftById(giftId);
 
-  if (recipients.length) {
+  if(type==='whatsapp') {
+    await GiftModel.findByIdAndUpdate(giftId, {isSent: true, via: "whatsapp"})
+  }
+  if (recipients?.length) {
     await sendMail({
       to: recipients,
       subject: "Start Your Wishlist Journey with Giftshores!",
+      handleSuccess: async ()=>{
+await GiftModel.findByIdAndUpdate(giftId, {isSent: true, via: "mail"})
+      },
+      handleError: ()=>{
+      },
       data: {
         name: `${gift.owner.firstName} ${gift.owner.lastName}`,
         gifts: gift.gifts,
         host: req.hostname,
       },
-    });
+    })
+      .then((err) => {
+        console.log(err, "SUCCESS");
+      })
+      .catch((err) => console.log(err, "ERROR"));
   }
+
   res.json({
     success: true,
-    message: "Wish successfully sent",
+    message: "Wish-list successfully sent",
     data: gift,
   });
+  
 };
