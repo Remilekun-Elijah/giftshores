@@ -4,4 +4,4 @@ exports.smtp_secret = "izwdvcukuockvijt";
 exports.smtp_user = "Remilekunelijah21997@gmail.com";
 exports.smtp_from = "giftshores@gmail.com";
 exports.application_name = "GIFT SHORES";
-exports.smtp_host = "smtp.google.com";
+exports.smtp_host = "gmail";

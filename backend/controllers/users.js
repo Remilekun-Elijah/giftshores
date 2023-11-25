@@ -12,10 +12,8 @@ const validateUser = joi.object({
 });
 
 exports.createUser = async (req, res, next) => {
-  // console.log(req.body);
   try {
     const payload = await validateUser.validateAsync(req.body);
-    console.log(payload);
     const doc = await UserModel.create(payload);
     if (doc) {
       res.json({
@@ -53,7 +51,6 @@ exports.createGifts = async (req, res, next) => {
   try {
     const payload = req.body,
       { userId } = req.params;
-    console.log(payload);
 
     if (payload.gifts && payload?.gifts?.length) {
       const doc = await GiftModel.create({ ...payload, owner: userId });
@@ -87,7 +84,6 @@ exports.createGifts = async (req, res, next) => {
 };
 
 exports.sendGift = async (req, res, next) => {
-  console.log(req.body);
   const { giftId } = req.params,
     { recipients } = req.body;
 
@@ -96,10 +92,11 @@ exports.sendGift = async (req, res, next) => {
   if (recipients.length) {
     await sendMail({
       to: recipients,
-      subject: gift.purpose,
+      subject: "Start Your Wishlist Journey with Giftshores!",
       data: {
         name: `${gift.owner.firstName} ${gift.owner.lastName}`,
         gifts: gift.gifts,
+        host: req.hostname,
       },
     });
   }

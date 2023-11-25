@@ -1,19 +1,25 @@
 const path = require("path");
 const config = require("./index");
 const nodemailer = require("nodemailer");
-const { info, error, log } = console;
+const { info, error, success } = require("consola");
 const { sendGiftTemplate } = require("../email/gift");
 
 exports.sendMail = async function (message) {
-  console.log(sendGiftTemplate({ ...message.data, purpose: message.subject }));
   info("sending mail to", message.to + "...");
   const transporter = nodemailer.createTransport({
-    host: config.smtp_host,
-    port: 465, // 587 465
-    secure: true,
-    auth: {
+    service: "gmail",
+    // host: config.smtp_host,
+    port: 465, // 587 465Z
+    // secure: true,
+    _auth: {
       user: config.smtp_user,
       pass: config.smtp_secret,
+    },
+    get auth() {
+      return this._auth;
+    },
+    set auth(value) {
+      this._auth = value;
     },
   });
   const packet = {
@@ -34,9 +40,10 @@ exports.sendMail = async function (message) {
           if (err) {
             console.error(err);
             error("Failed to send mail");
-          } else log("Email sent to:", info.messageId, "after failed trial ");
+          } else
+            success("Email sent to:", info.messageId, "after failed trial ");
         });
-      } else log("Email sent to:", infos.messageId);
+      } else success("Email sent to:", infos.messageId);
     });
   } catch (e) {
     throw new Error(
