@@ -24,7 +24,7 @@ const Home = () => {
               }}
             />
             <div>
-              <h1 className="lg:text-3xl md:text-2xl sm:text-lg text-lg uppercase">
+              <h1 className="lg:text-3xl md:text-2xl sm:text-lg font-[700] text-lg uppercase">
                 Creating gifts wish list
               </h1>
               <h1 className="lg:text-3xl md:text-2xl sm:text-lg text-lg uppercase">
@@ -40,6 +40,24 @@ const Home = () => {
               }}
             />
           </div>
+          <center className="py-5">
+            <Button
+              component={Link}
+              to={"/create-list"}
+              size="large"
+              sx={{
+                px: 10,
+                py: 2,
+                background: "linear-gradient(to right, purple, #E491E8)",
+              }}
+              color="error"
+              className="z-10 px-10"
+              variant="contained"
+            >
+              Create List
+            </Button>
+          </center>
+
           <div className="text-center mt-10 py-10 px-3 flex flex-col items-center">
             <div className="flex items-center flex-wrap justify-center md:gap-10 gap-0">
               <img
