@@ -1,7 +1,7 @@
 const path = require("path");
 const config = require("./index");
 const nodemailer = require("nodemailer");
-const { info, error, success } = require("consola");
+const { info, error, log } = console;
 const { sendGiftTemplate } = require("../email/gift");
 
 exports.sendMail = async function (message) {
@@ -34,10 +34,9 @@ exports.sendMail = async function (message) {
           if (err) {
             console.error(err);
             error("Failed to send mail");
-          } else
-            success("Email sent to:", info.messageId, "after failed trial ");
+          } else log("Email sent to:", info.messageId, "after failed trial ");
         });
-      } else success("Email sent to:", infos.messageId);
+      } else log("Email sent to:", infos.messageId);
     });
   } catch (e) {
     throw new Error(
