@@ -142,7 +142,6 @@ Giftshores
         variant="text"
         loading={false}
         sx={{
-          // mt: "1em",
           height: "2.3rem",
           alignItems: "center",
           px: "1em",
@@ -163,7 +162,6 @@ Giftshores
         type="submit"
         disabled={!Object.values(model1).filter(Boolean).length}
         sx={{
-          // mt: "1em",
           height: "2.3rem",
           alignItems: "center",
           px: "1em",
@@ -472,7 +470,6 @@ Giftshores
                   variant="text"
                   className="__btn_res"
                   sx={{
-                    // mt: "1em",
                     height: "2.3rem",
                     alignItems: "center",
                     px: "1em",
