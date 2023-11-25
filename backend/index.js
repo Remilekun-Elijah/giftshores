@@ -1,8 +1,8 @@
 const express = require("express"),
-  path = require("path"),
+  // path = require("path"),
   cors = require("cors"),
   apiVersion = "/v1",
-  { HTTP_OK } = require("./config/http.status.code"),
+  // { HTTP_OK } = require("./config/http.status.code"),
   route = require("./routes/index"),
   app = express(),
   mongoose = require("mongoose"),
@@ -21,7 +21,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.resolve(__dirname, "../public")));
+// app.use(express.static(path.resolve(__dirname, "../public")));
 // app.set("view engine", "ejs");
 // app.set("views", path.resolve("views"));
 app.use(cors("*"));
