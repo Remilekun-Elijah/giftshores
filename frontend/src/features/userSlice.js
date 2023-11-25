@@ -55,12 +55,12 @@ export const sendGift = createAsyncThunk(
 
 const initialState = {
   payload: {
-    firstName: "Remilekun",
-    lastName: "Elijah",
-    email: "remilekunelijah97@gmail.com",
-    country: "Nigeria",
-    gender: "male",
-    purpose: "new Year",
+    firstName: "",
+    lastName: "",
+    email: "",
+    country: "",
+    gender: "",
+    purpose: "",
   },
   userId: "",
   giftId: "",
