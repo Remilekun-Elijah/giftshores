@@ -27,8 +27,15 @@ import WestIcon from "@mui/icons-material/West";
 import SendIcon from "@mui/icons-material/Send";
 import { vCreateUser } from "../utils/validators";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser, getUserData } from "../features/userSlice";
-import { Link } from "react-router-dom";
+import {
+  createGift,
+  createUser,
+  getUserData,
+  sendGift,
+} from "../features/userSlice";
+import { Link, useNavigate } from "react-router-dom";
+import countries from "../utils/countries";
+import config from "../utils/config";
 
 const steps = [
   "Select master blaster campaign settings",
@@ -38,8 +45,8 @@ const steps = [
 
 const GiftList = () => {
   let { payload, loading } = useSelector(getUserData),
-    payload_t = {},
-    [isLoading, setIsLoading] = useState(false);
+    navigate = useNavigate(),
+    payload_t = {};
 
   Array(10)
     .fill("name")
@@ -61,10 +68,8 @@ const GiftList = () => {
     } = useFormik({
       validationSchema: vCreateUser,
       initialValues: payload,
-      onSubmit: async (values) => {
-        console.log(values);
+      onSubmit: async ({ purpose, ...values }) => {
         const res = await dispatch(createUser(values)).unwrap();
-        console.log(res);
         res.success && setStep(step + 1);
       },
     });
@@ -72,36 +77,56 @@ const GiftList = () => {
   const responsiveCss = {
     flexDirection: { sm: "row", sx: "column" },
     maxWidth: { lg: "80%", md: "90%", sm: "95%", xs: "100%" },
-    maxHeight: { xl: "75%", lg: "80%", md: "70%", sm: "90%", xs: "100%" },
+    maxHeight: { xl: "85%", lg: "80%", md: "90%", sm: "90%", xs: "100%" },
     // height: { sm: "20px" },
   };
 
   const handleChange2 = ({ target: { name, value } }) => {
       setModel1((state) => ({ ...state, [name]: value }));
     },
-    submit = (e) => {
+    submit = async (e) => {
       e.preventDefault();
-      setIsLoading(true);
-      console.log(model1);
-      setTimeout(() => {
-        setIsLoading(false);
-        setStep(step + 1);
-      }, 2000);
+      if (step === 1) {
+        const res = await dispatch(
+          createGift({
+            gifts: Object.values(model1).filter(Boolean),
+            purpose: values.purpose,
+          })
+        ).unwrap();
+
+        res?.success && setStep(step + 1);
+      } else {
+        const res = await dispatch(
+          sendGift({ recipients: values.recipients })
+        ).unwrap();
+
+        if (res?.success) {
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+        }
+      }
     };
 
   const formattedList = Object.values(model1)
     ?.filter(Boolean)
-    .map((n) => `${n}\r\n`);
+    .map((n, i) => `${i + 1}. ${n}\r\n`);
   // ?.split("\n");
   let message = `
 Hi there,\n
 
-Great news! ${values.firstName} ${values.lastName} has just shared a fantastic wishlist for their ${values.purpose}, and we thought you might want to join in on the fun.\n
+Great news! ${values.firstName} ${
+    values.lastName
+  } has just shared a fantastic wishlist for their ${
+    values.purpose
+  }, and we thought you might want to join in on the fun.\n
 
 Check out their list: \r\n
-${formattedList}
+${formattedList.join("")}
 \n
-Ready to create your own wishlist and spread the joy? Head over to https//localhost:5173 and start crafting your perfect wishlist to share with family and friends.
+Ready to create your own wishlist and spread the joy? Head over to ${
+    config.frontendUrl
+  } and start crafting your perfect wishlist to share with family and friends.
 \r\n
 Happy gifting! \n
 Giftshores
@@ -109,11 +134,54 @@ Giftshores
   const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
     message
   )}`;
-  console.log(whatsappUrl);
+
+  const btnGroped = (
+    <>
+      <LoadingButton
+        startIcon={<WestIcon />}
+        variant="text"
+        loading={false}
+        sx={{
+          // mt: "1em",
+          height: "2.3rem",
+          alignItems: "center",
+          px: "1em",
+          fontSize: "semibold",
+          color: "white",
+          background: "#333",
+        }}
+        onClick={() => setStep(step - 1)}
+      >
+        {" "}
+        Previous{" "}
+      </LoadingButton>
+
+      <LoadingButton
+        {...{ loading }}
+        endIcon={<EastIcon />}
+        variant="text"
+        type="submit"
+        disabled={!Object.values(model1).filter(Boolean).length}
+        sx={{
+          // mt: "1em",
+          height: "2.3rem",
+          alignItems: "center",
+          px: "1em",
+          fontSize: "semibold",
+          color: "white",
+          background: "linear-gradient(to right, purple, #E491E8)",
+        }}
+      >
+        {" "}
+        Next{" "}
+      </LoadingButton>
+    </>
+  );
+
   return (
     <div className="md:h-screen bg-[#eee]">
       <Navbar />
-      <div className="flex justify-center items-center h-full md:mt-0 my-16">
+      <div className="flex justify-center items-center h-full md:mt-18 my-16">
         <Box
           className="img h-full flex flex-col  md:shadow-xl"
           sx={responsiveCss}
@@ -135,16 +203,37 @@ Giftshores
                 </Step>
               ))}
             </Stepper>
-
-            <h2 className="text-2xl text-center mt-10 mb-8">
+            {step === 2 && (
+              <div className="px-10 mt-2">
+                <div className="flex justify-center my-5">
+                  <Button
+                    sx={{
+                      background:
+                        "linear-gradient(to right, darkgreen, #0DE815)",
+                    }}
+                    className="z-10"
+                    variant="contained"
+                    color="success"
+                    target="_blank"
+                    LinkComponent={Link}
+                    to={whatsappUrl}
+                    size="small"
+                  >
+                    <Avatar src="./whatsapp.png" /> Share on WhatsApp
+                  </Button>
+                </div>
+                <Divider>OR</Divider>
+              </div>
+            )}
+            <h2 className="text-2xl text-center mt-5 mb-8">
               {step === 0
                 ? "Fill the form to proceed"
                 : step === 1
                 ? "Enter your gift names"
-                : "Enter email address of your friends/families"}
+                : "Enter email address of your friends, colleagues and family"}
             </h2>
 
-            <div className={`relative ${step === 1 && "md:overflow-y-auto"}`}>
+            <div className={`relative ${step === 1 && "md:overflow-y-aut"}`}>
               {/* STEP 1 */}
               <Box
                 noValidate
@@ -237,11 +326,11 @@ Giftshores
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
-                        <MenuItem value={"Nigeria"}>Nigeria</MenuItem>
-                        <MenuItem value={"Ghana"}>Ghana</MenuItem>
-                        <MenuItem value={"United State of America"}>
-                          United State of America
-                        </MenuItem>
+                        {countries.map((name, i) => (
+                          <MenuItem key={i} value={name}>
+                            {name}
+                          </MenuItem>
+                        ))}
                       </Select>
 
                       {errors.country && touched.country && (
@@ -306,6 +395,12 @@ Giftshores
                       control={<Radio id="gender" value={"female"} />}
                       label="Female"
                     />
+                    <FormControlLabel
+                      value="non-binary"
+                      onChange={handleChange}
+                      control={<Radio id="gender" value={"non-binary"} />}
+                      label="Non-binary"
+                    />
                   </RadioGroup>
                   {errors.gender && touched.gender && (
                     <FormHelperText
@@ -346,7 +441,7 @@ Giftshores
                 noValidate
                 component="form"
                 onSubmit={submit}
-                className={`grid lg:grid-cols-2 transition-opacity px-10 absolute top-0 gap-10 m-auto w-full  ${
+                className={`grid items-center lg:grid-cols-3 transition-opacity px-10 absolute top-0 gap-10 m-auto w-full  ${
                   step === 1 ? "opacity-100 z-40" : "opacity-0 z-0 hidden"
                 }`}
               >
@@ -363,7 +458,7 @@ Giftshores
                         <TextField
                           className="w-full z-10 bg-[rgba(255,255,255,.5)]"
                           id={name}
-                          label={`Name ${i + 1}`}
+                          label={`Gift ${i + 1}`}
                           name={name}
                           variant="standard"
                           value={model1[name]}
@@ -372,58 +467,67 @@ Giftshores
                       </FormControl>
                     );
                   })}
-                <div className="md:block hidden"></div>
-                <div className="flex justify-between my-5">
-                  <LoadingButton
-                    startIcon={<WestIcon />}
-                    variant="text"
-                    loading={false}
-                    sx={{
-                      // mt: "1em",
-                      height: "2.3rem",
-                      alignItems: "center",
-                      px: "1em",
-                      fontSize: "semibold",
-                      color: "white",
-                      background: "#333",
-                    }}
-                    onClick={() => setStep(step - 1)}
-                  >
-                    {" "}
-                    Previous{" "}
-                  </LoadingButton>
+                <Button
+                  startIcon={<WestIcon />}
+                  variant="text"
+                  className="__btn_res"
+                  sx={{
+                    // mt: "1em",
+                    height: "2.3rem",
+                    alignItems: "center",
+                    px: "1em",
+                    fontSize: "semibold",
+                    color: "white",
+                    background: "#333",
+                  }}
+                  onClick={() => setStep(step - 1)}
+                >
+                  {" "}
+                  Previous{" "}
+                </Button>
 
-                  <LoadingButton
-                    {...{ loading: isLoading }}
-                    endIcon={<EastIcon />}
-                    variant="text"
-                    type="submit"
-                    disabled={!Object.values(model1).filter(Boolean).length}
-                    sx={{
-                      // mt: "1em",
-                      height: "2.3rem",
-                      alignItems: "center",
-                      px: "1em",
-                      fontSize: "semibold",
-                      color: "white",
-                      background: "linear-gradient(to right, purple, #E491E8)",
-                    }}
-                  >
-                    {" "}
-                    Next{" "}
-                  </LoadingButton>
+                <LoadingButton
+                  {...{ loading }}
+                  className="__btn_res"
+                  endIcon={<EastIcon />}
+                  variant="text"
+                  type="submit"
+                  disabled={!Object.values(model1).filter(Boolean).length}
+                  style={{}}
+                  sx={{
+                    ".MuiLoadingButton-loadingIndicatorCenter": {
+                      color: "#fff !important",
+                    },
+                    height: "2.3rem",
+                    alignItems: "center",
+                    px: "1em",
+                    fontSize: "semibold",
+                    color: "white",
+                    background: "linear-gradient(to right, purple, #E491E8)",
+                  }}
+                >
+                  {" "}
+                  Next{" "}
+                </LoadingButton>
+
+                <div className="md:hidden hidden"></div>
+                <div className="md:hidden flex justify-between my-5">
+                  {btnGroped}
                 </div>
               </Box>
 
               {/* STEP 3 */}
               <Box
+                noValidate
+                component="form"
+                onSubmit={submit}
                 className={` transition-opacity px-10 absolute top-0 gap-10 m-auto w-full  ${
                   step === 2 ? "opacity-100 z-40" : "opacity-0 z-0 hidden"
                 }`}
               >
                 <FormControl className="w-full lg:mt-5 z-10 bg-[rgba(255,255,255,.5)]">
                   <Textarea
-                    placeholder="Receivers email address"
+                    placeholder="Receivers email addresses separated by comma..."
                     name="recipients"
                     id="recipients"
                     value={values?.recipients}
@@ -458,7 +562,6 @@ Giftshores
                     loading={false}
                     className="z-10"
                     sx={{
-                      mt: "1em",
                       height: "2.3rem",
                       alignItems: "center",
                       px: "1em",
@@ -475,10 +578,13 @@ Giftshores
                   <LoadingButton
                     {...{ loading }}
                     endIcon={<SendIcon />}
+                    type="submit"
                     variant="text"
                     className="z-10"
                     sx={{
-                      mt: "1em",
+                      ".MuiLoadingButton-loadingIndicatorCenter": {
+                        color: "#fff !important",
+                      },
                       height: "2.3rem",
                       alignItems: "center",
                       px: "1em",
@@ -488,26 +594,8 @@ Giftshores
                     }}
                   >
                     {" "}
-                    Send{" "}
+                    Send To mail{" "}
                   </LoadingButton>
-                </div>
-
-                <Divider>OR</Divider>
-                <div className="flex justify-center mt-3">
-                  <Button
-                    sx={{
-                      background:
-                        "linear-gradient(to right, darkgreen, #0DE815)",
-                    }}
-                    className="z-10"
-                    variant="contained"
-                    color="success"
-                    LinkComponent={Link}
-                    to={whatsappUrl}
-                    size="small"
-                  >
-                    <Avatar src="./whatsapp.png" /> Share on WhatsApp
-                  </Button>
                 </div>
               </Box>
             </div>

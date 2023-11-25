@@ -31,6 +31,12 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+@media screen and (max-width:740px) {
+  .__btn_res {
+    display: none !important
+  }
+}
+
 .transition {
   transition: all .5s;
   left: 0;

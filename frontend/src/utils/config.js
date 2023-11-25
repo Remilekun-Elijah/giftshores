@@ -9,18 +9,16 @@ const routes = {
 
 environment.development = {
   authProps: ["g/token", "g/user"],
-  // backendUrl:
-  // process.env.REACT_APP_BACKEND_URL || "http://104.248.172.21:8002/",
+  backendUrl: "https://api-giftshores.onrender.com/v1",
   routes,
-  frontendUrl: "http://104.248.172.21:3001/",
+  frontendUrl: "https://giftshores.vercel.app",
 };
 
 environment.staging = {
   authProps: ["g/token", "g/user"],
-  // backendUrl:
-  //   process.env.REACT_APP_BACKEND_URL || "http://104.248.172.21:8002/",
+  backendUrl: "https://api-giftshores.onrender.com/v1",
   routes,
-  frontendUrl: "http://104.248.172.21:3001/",
+  frontendUrl: "https://giftshores.vercel.app/",
 };
 
 environment.production = {
