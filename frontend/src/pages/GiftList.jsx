@@ -32,6 +32,7 @@ import {
   createUser,
   getUserData,
   sendGift,
+  sendToWhatsapp,
 } from "../features/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import countries from "../utils/countries";
@@ -44,7 +45,7 @@ const steps = [
 ];
 
 const GiftList = () => {
-  let { payload, loading } = useSelector(getUserData),
+  let { payload, loading, modalLoading } = useSelector(getUserData),
     navigate = useNavigate(),
     payload_t = {};
 
@@ -176,6 +177,10 @@ Giftshores
     </>
   );
 
+  const handleShare = async () => {
+    const res = await dispatch(sendToWhatsapp({url: whatsappUrl})).unwrap()
+    res?.success && window.open(whatsappUrl)
+  }
   return (
     <div className="md:h-screen bg-[#eee]">
       <Navbar />
@@ -204,21 +209,26 @@ Giftshores
             {step === 2 && (
               <div className="px-10 mt-2">
                 <div className="flex justify-center my-5">
-                  <Button
+                  <LoadingButton
                     sx={{
+                      ".MuiLoadingButton-loadingIndicatorCenter": {
+                        color: "#fff !important",
+                      },
                       background:
                         "linear-gradient(to right, darkgreen, #0DE815)",
                     }}
+                    loading={modalLoading}
                     className="z-10"
                     variant="contained"
                     color="success"
-                    target="_blank"
-                    LinkComponent={Link}
-                    to={whatsappUrl}
+                    onClick={handleShare}
+                    // target="_blank"
+                    // LinkComponent={Link}
+                    // to={whatsappUrl}
                     size="small"
                   >
                     <Avatar src="./whatsapp.png" /> Share on WhatsApp
-                  </Button>
+                  </LoadingButton>
                 </div>
                 <Divider>OR</Divider>
               </div>

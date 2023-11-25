@@ -3,6 +3,18 @@ import config from "../utils/config";
 import Storage from "../utils/storage";
 import BACKEND from "../utils/backend";
 
+export const getUsers = createAsyncThunk("/user/getUsers", async (thunkAPI) => {
+  try {
+    return new BACKEND().send({
+      type: "get",
+      to: "/users",
+      useAlert: false,
+    });
+  } catch (error) {
+    thunkAPI.rejectWithValue("An error occurred somewhere");
+  }
+});
+
 export const createUser = createAsyncThunk(
   "/user/createUser",
   async (payload, thunkAPI) => {
@@ -53,19 +65,38 @@ export const sendGift = createAsyncThunk(
   }
 );
 
+export const sendToWhatsapp = createAsyncThunk(
+  "/user/sendGift/?type=whatsapp",
+  async (payload, thunkAPI) => {
+    const { giftId } = thunkAPI.getState().user;
+    try {
+      return new BACKEND().send({
+        type: "post",
+        to: `/send/${giftId}/?type=whatsapp`,
+        useAlert: true,
+        payload,
+      });
+    } catch (error) {
+      thunkAPI.rejectWithValue("An error occurred somewhere");
+    }
+  }
+);
+
 const initialState = {
   payload: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    country: "",
-    gender: "",
-    purpose: "",
+    firstName: "Remilekun",
+    lastName: "Elijah",
+    email: "remilekunelijah97@gmail.com",
+    country: "Nigeria",
+    gender: "male",
+    purpose: "New Year",
   },
   userId: "",
   giftId: "",
+  users: [],
   loading: false,
   preloading: false,
+  modalLoading: false,
   modal: { open: false, close: false },
 };
 
@@ -121,6 +152,19 @@ export const userSlice = createSlice({
       })
       .addCase(sendGift.rejected, (state) => {
         state.loading = false;
+      });
+    /** sendGift Builder |END| **/
+
+    /** sendToWhatsapp Builder **/
+    builder
+      .addCase(sendToWhatsapp.pending, (state) => {
+        state.modalLoading = true;
+      })
+      .addCase(sendToWhatsapp.fulfilled, (state) => {
+        state.modalLoading = false;
+      })
+      .addCase(sendToWhatsapp.rejected, (state) => {
+        state.modalLoading = false;
       });
     /** sendGift Builder |END| **/
   },

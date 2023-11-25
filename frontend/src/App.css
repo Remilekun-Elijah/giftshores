@@ -41,3 +41,9 @@ body {
   transition: all .5s;
   left: 0;
 }
+
+:root {
+  --c-primary-0: purple;
+  --c-primary-1: rgba(255, 36, 20, 0.1);
+  --c-primary-2: #F7F8F5;
+}
