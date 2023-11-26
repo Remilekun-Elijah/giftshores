@@ -23,7 +23,7 @@ const Report = () => {
 
       reports,
     } = useSelector(getDashboardData),
-    [open, setOpen] = useState(true);
+    [open, setOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([dispatch(getReport())]);
@@ -34,7 +34,7 @@ const Report = () => {
     email: owner?.email || "N/A",
     gender: owner.gender || "N/A",
     country: owner.country || "N/A",
-    via: capitalize(via),
+    via: via ? capitalize(via) : "N/A",
     "Date Created": dayjs(createdAt).format("MMM DD, YYYY"),
     Status: isSent ? "Sent" : "Not Sent",
     // _data: user,

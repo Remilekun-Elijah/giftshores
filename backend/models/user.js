@@ -39,6 +39,24 @@ const giftSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+giftSchema.methods.findByGenderOrCountry = async (
+  { filterA, filterB, limit, skip },
+  next
+) => {
+  const docs = await this.UserModel.find(filterA);
+
+  return await this.GiftModel.find({
+    owner: { $in: docs?.map((d) => d?._id) },
+    ...filterB,
+  })
+    .populate("owner", "-password")
+    .limit(limit)
+    .skip(skip)
+    .sort({
+      createdAt: -1,
+    });
+};
+
 giftSchema.plugin(MongooseFindByReference);
 exports.UserModel = mongoose.model("users", userSchema);
 exports.GiftModel = mongoose.model("gifts", giftSchema);
