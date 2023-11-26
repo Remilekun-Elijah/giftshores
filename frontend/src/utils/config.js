@@ -5,11 +5,14 @@ const routes = {
   home: "/",
   dashboard: "/dashboard",
   create: "/create-list",
+  user: "/users",
+  report: "/reports",
 };
 
 environment.development = {
   authProps: ["g/token", "g/user"],
   backendUrl: "https://api-giftshores.onrender.com/v1",
+  // backendUrl: "http://localhost:3000/v1",
   routes,
   frontendUrl: "https://giftshores.vercel.app",
 };

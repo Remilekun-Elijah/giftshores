@@ -30,11 +30,8 @@ export function currencyFormat(num, currencySymbol) {
 }
 
 export const Roles = {
-  vendor: "vendor",
   admin: "admin",
-  bank: "bank_staff",
-  superAdmin: "super_admin",
-  solicitor: "solicitor",
+  superAdmin: "superadmin",
 };
 
 export const loggedInUser = Storage.get(config.authProps[1]);
@@ -43,19 +40,18 @@ export const getRole = () => {
   if (loggedInUser) {
     user = JSON.parse(loggedInUser);
   }
-  return user?.role;
+  return user?.role?.[0];
 };
-
-export const getId = () => {
+export const getIds = () => {
   let user = {};
   if (loggedInUser) {
     user = JSON.parse(loggedInUser);
   }
   return {
-    bank: user?.userId,
-    admin: user?.userId,
-    vendor: user?.vendorId,
-    user: user?.userId,
+    company: user.companies[0].id,
+    hmo: user.hmos[0].id,
+    hospital: user.hospitals[0].id,
+    user: user.id,
   };
 };
 
@@ -66,37 +62,41 @@ export const validateEmail = (email) => {
 };
 
 export const capitalize = (string) => {
-  const final = string?.replace(/\w\S*/g, (txt) => {
+  const final = string.replace(/\w\S*/g, (txt) => {
     let val = txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     return val;
   });
   return final;
 };
-export const camelCasedPathName = () =>
-  document.location.pathname
-    .replace("/", "")
-    .split("-")
-    .map((r, i) => (i > 0 ? capitalize(r) : r))
-    ?.join("");
 
-export function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  const options = { month: "short", day: "numeric", year: "numeric" };
-  const formattedDate = date.toLocaleDateString("en-US", options);
-  return formattedDate;
-}
+export const tabList = [
+  {
+    name: "Departments",
+    id: 1,
+    code: "Department",
+  },
+  {
+    name: "Branches",
+    id: 2,
+    code: "Branch",
+  },
+  {
+    name: "Devices",
+    id: 3,
+    code: "Device",
+  },
+  {
+    name: "System",
+    id: 4,
+    code: "System",
+  },
+];
 
-export function formatTime(datetimeStr) {
-  const datetime = new Date(datetimeStr);
-  const time = datetime.toLocaleTimeString("en-US", {
-    hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return time;
-}
-
-export const handleSearch = ({ value, useCaps, cb }) => {
-  const branch = useCaps ? capitalize(value) : value;
-  cb(branch.trim());
-};
+export const getBranchIdByName = (name, branches) =>
+  branches.find(
+    (branch) => branch?.branchName?.toLowerCase() === name?.toLowerCase()
+  )?.id;
+export const getMdaIdByName = (name, departments) =>
+  departments.find(
+    (branch) => branch?.department?.toLowerCase() === name?.toLowerCase()
+  )?.id;
