@@ -23,7 +23,7 @@ const Report = () => {
 
       reports,
     } = useSelector(getDashboardData),
-    [open, setOpen] = useState(true);
+    [open, setOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([dispatch(getReport())]);
