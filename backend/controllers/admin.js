@@ -2,29 +2,45 @@ const { GiftModel } = require("../models/user");
 const dayjs = require("dayjs");
 
 exports.getReport = async (req, res, next) => {
-  let { pageSize, pageNumber, gender } = req.query;
+  let { pageSize, pageNumber, gender, country, isSent, via } = req.query;
 
   pageSize = pageSize || Infinity;
   pageNumber = pageNumber > 0 ? pageNumber - 1 : 0;
-  const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  const createdAt = dayjs(date).subtract(2, "day").toISOString();
+  const limit = Number(pageSize),
+    skip = pageNumber * pageSize;
+  let docs,
+    filterA = {},
+    filterB = {};
 
-  console.log(createdAt);
-  const docs = await GiftModel.find({})
-    .populate("owner", "-password")
-    .limit(Number(pageSize))
-    .skip(pageNumber * pageSize)
-    .sort({
-      createdAt: -1,
-    })
-    .exec();
+  if (gender) filterA.gender = gender;
+  if (country) filterA.country = country;
+  if (isSent) filterB.isSent = isSent;
+  if (via) filterB.via = via;
+
+  const giftModel = new GiftModel();
+  if (gender || country) {
+    docs = await giftModel.findByGenderOrCountry({
+      filterA,
+      filterB,
+      limit,
+      skip,
+    });
+  } else {
+    docs = await GiftModel.find(filterB)
+      .populate("owner", "-password")
+      .limit(limit)
+      .skip(skip)
+      .sort({
+        createdAt: -1,
+      });
+    // .exec();
+  }
 
   const pageCount = await GiftModel.countDocuments(),
     data = {
       reports: docs,
-      totalPages: Math.ceil(pageCount / pageSize) || 1,
-      page: parseInt(pageNumber) + 1,
+      // totalPages: Math.ceil(pageCount / pageSize) || 1,
+      // page: parseInt(pageNumber) + 1,
       perPage: docs.length,
       count: pageCount,
     };
@@ -66,14 +82,6 @@ exports.getStats = async (req, res, next) => {
             "DD/MM/YYYY"
           ),
         },
-      },
-    },
-    {
-      $lookup: {
-        foreignField: "_id",
-        localField: "owner",
-        from: "users",
-        as: "user",
       },
     },
     {
