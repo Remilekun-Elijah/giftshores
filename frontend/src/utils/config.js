@@ -11,8 +11,8 @@ const routes = {
 
 environment.development = {
   authProps: ["g/token", "g/user"],
-  // backendUrl: "https://api-giftshores.onrender.com/v1",
-  backendUrl: "http://localhost:3000/v1",
+  backendUrl: "https://api-giftshores.onrender.com/v1",
+  // backendUrl: "http://localhost:3000/v1",
   routes,
   frontendUrl: "https://giftshores.vercel.app",
 };
