@@ -24,7 +24,7 @@ const links = [
 
   {
     authorizedUsers: ["all"],
-    name: "Report",
+    name: "Reports",
     url: routes.report,
     icon: EventNoteIcon,
   },

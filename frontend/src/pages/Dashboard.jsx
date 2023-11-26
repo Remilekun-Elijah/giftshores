@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import HomeLayout from "../layouts/Home";
 import Box from "@mui/material/Box";
 import { Skeleton, Typography } from "@mui/material";
@@ -10,70 +10,77 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Table from "../components/table/Table";
 import TablePreloader from "../components/Loader/TablePreloader";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData, getUsers } from "../features/userSlice";
 import dayjs from "dayjs";
 import PieChart from "../components/others/PieChart";
-import { getDashboardData } from "../features/dashboardSlice";
-import NorthIcon from "@mui/icons-material/North";
-import SouthIcon from "@mui/icons-material/South";
+import {
+  getDashboardData,
+  getDashboardStats,
+  getReport,
+} from "../features/dashboardSlice";
 import AreaChart from "../components/others/AreaChat";
 import ScheduleSendIcon from "@mui/icons-material/ScheduleSend";
 import SendIcon from "@mui/icons-material/Send";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
+import { capitalize, getAmount } from "../utils/helper";
 
 const { routes } = config;
 export default function Dashboard() {
-  const { loading, users, pagination } = useSelector(getUserData),
-    { loading: dashLoading, analytics, stats } = useSelector(getDashboardData),
+  const { loading, pagination, modalLoading, reports, analytics, stats } =
+      useSelector(getDashboardData),
     dispatch = useDispatch();
 
-  const analyticsMap = [
+  console.log(analytics);
+
+  const statsMap = [
     {
-      type: "Total Users",
+      type: "Total Reports",
       icon: PeopleAltIcon,
-      ave: analytics?.latePercentage
-        ? (
-            Math.round(analytics?.earlyPercentage) +
-            Math.round(analytics?.latePercentage)
-          ).toFixed(2)
-        : 0,
-      amount: analytics?.totalUsers || 0,
-      color: "#E5ECF6",
+      amount: stats?.totalReport || 0,
+      color: "linear-gradient(45deg, #E5ECF6, grey)",
     },
     {
       type: "Total Sent Gifts",
       icon: SendIcon,
-      ave: analytics?.earlyPercentage || 0,
-      amount: analytics?.earlyComers || 0,
-      color: "#E6F1D6",
+      amount: stats?.totalSent || 0,
+      color: "linear-gradient(45deg, #ECB5E9, #975F94)",
     },
     {
       type: "Total Unsent Gifts",
       icon: ScheduleSendIcon,
-      ave: analytics?.latePercentage || 0,
-      amount: analytics?.lateComers || 0,
-      color: "#F5EBEB",
+      amount: stats?.totalUnsent || 0,
+      color: "linear-gradient(45deg, #E87885, silver)",
+    },
+    {
+      type: "Total Shared",
+      icon: WhatsAppIcon,
+      amount: stats?.totalSharedToWhatsapp || 0,
+      color: "linear-gradient(45deg, #62BB47, #B6ECA7)",
+    },
+    {
+      type: "Total Sent to mail",
+      icon: ForwardToInboxIcon,
+      amount: stats?.totalSentToMail || 0,
+      color: "linear-gradient(45deg, #E28282, #EADB9C)",
     },
   ];
 
   useEffect(() => {
     Promise.all([
-      dispatch(getUsers({ pageSize: 5 })),
-      // dispatch(getDashboard()),
-      // dispatch(getDashboardStats()),
+      dispatch(getReport({ pageSize: 5 })),
+      dispatch(getDashboardStats()),
     ]);
   }, []);
 
-  const data = users.map((user, idx) => ({
-    "S/N": pagination.pageSize * (pagination.page - 1) + idx + 1,
-    name: user.firstName + " " + user.lastName,
-    Department: user?.Department?.department || "N/A",
-    "Staff ID": user.staffId || "N/A",
-    BVN: user.bvn || "N/A",
-    Branch: user?.Branch?.branchName || "N/A",
-    "Date Created": dayjs(user.createdAt).format("MMM DD, YYYY"),
-    Status: user.verified ? "Active" : "Inactive",
-    _data: user,
+  const data = reports?.map(({ createdAt, owner, isSent, via }) => ({
+    name: owner?.firstName + " " + owner?.lastName,
+    email: owner?.email || "N/A",
+    gender: owner?.gender || "N/A",
+    country: owner?.country || "N/A",
+    via: capitalize(via),
+    "Date Created": dayjs(createdAt).format("MMM DD, YYYY"),
+    Status: isSent ? "Sent" : "Not Sent",
   }));
 
   return (
@@ -91,20 +98,22 @@ export default function Dashboard() {
           Overview
         </Typography>
 
-        <Box className="grid  lg:grid-cols-3 gap-10 flex-wrap mb-14">
-          {dashLoading
-            ? [1, 2, 3].map((_, i) => (
-                <Skeleton
-                  key={i}
-                  animation="wave"
-                  variant="rounded"
-                  height="130px"
-                />
-              ))
-            : analyticsMap.map((data, index) => {
+        <Box className="grid  xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2  gap-10 flex-wrap mb-14">
+          {loading
+            ? Array(5)
+                .fill("")
+                .map((_, i) => (
+                  <Skeleton
+                    key={i}
+                    animation="wave"
+                    variant="rounded"
+                    height="130px"
+                  />
+                ))
+            : statsMap.map((data, index) => {
                 return (
                   <div
-                    className="rounded border p-5"
+                    className="rounded-lg border p-5"
                     key={index}
                     style={{ background: data.color }}
                   >
@@ -114,28 +123,9 @@ export default function Dashboard() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-3xl font-bold">{data.amount}</span>
-
-                      <div className="flex items-center">
-                        {Math.round(data.ave) > 50 ? (
-                          <NorthIcon
-                            style={{
-                              width: "14px",
-                              fontSize: "20px",
-                              fontWeight: "bolder",
-                            }}
-                          />
-                        ) : (
-                          <SouthIcon
-                            style={{
-                              width: "14px",
-                              fontSize: "20px",
-                              fontWeight: "bolder",
-                            }}
-                          />
-                        )}
-                        <span>{data.ave}%</span>
-                      </div>
+                      <span className="text-3xl font-bold">
+                        {getAmount(data.amount)}
+                      </span>
                     </div>
                   </div>
                 );
@@ -149,16 +139,13 @@ export default function Dashboard() {
           <AreaChart
             {...{
               dataset: {
-                labels: stats?.map?.((a) => a?.date),
-                values: {
-                  early: stats?.map((a) => a.early),
-                  late: stats?.map((a) => a.late),
-                },
+                labels: analytics?.map?.((a) => a?._id),
+                values: analytics?.map((a) => a.totalCount),
               },
-              title: "Monthly Report",
+              title: "Daily Reports",
             }}
           />
-          <div className="shado lg:w-[450px] w-full md:mt-0 my-10 lg:h-[200px] h-full">
+          <div className="lg:w-[450px] w-full md:mt-0 my-10 lg:h-[200px] h-full">
             <h2 className="md:mt-7 lg:text-left text-center w-full pt- text-[17px] font-[600] tracking-[0.18px]">
               Genders
             </h2>{" "}
@@ -166,20 +153,18 @@ export default function Dashboard() {
               id="bankDash"
               data={[
                 {
-                  value: stats?.totalClosedJobs || 0,
-                  name: loading ? "..." : `${stats?.totalClosedJobs || 0} Male`,
+                  value: stats?.totalMale || 0,
+                  name: loading ? "..." : `${stats?.totalMale || 0} Male`,
                 },
                 {
-                  value: stats?.totalRejectedJobs || 0,
-                  name: loading
-                    ? "..."
-                    : `${stats?.totalRejectedJobs || 0} Female`,
+                  value: stats?.totalFemale || 0,
+                  name: loading ? "..." : `${stats?.totalFemale || 0} Female`,
                 },
                 {
-                  value: stats?.totalRejectedJobs || 0,
+                  value: stats?.totalNonBinary || 0,
                   name: loading
                     ? "..."
-                    : `${stats?.totalRejectedJobs || 0} Non-binary`,
+                    : `${stats?.totalNonBinary || 0} Non-binary`,
                 },
               ]}
               color={["blue", "green", "orange"]}
@@ -195,11 +180,11 @@ export default function Dashboard() {
                 sx={{ px: 0 }}
               >
                 <Box className="flex justify-between mb-2">
-                  <Typography fontFamily={"Lota"}>All users</Typography>
-                  {users.length > 0 && (
+                  <Typography fontFamily={"Lota"}>All Reports</Typography>
+                  {reports.length > 0 && (
                     <Link
-                      to={routes.user}
-                      className="text-[var(--c-primary-0)] font-[Lota]"
+                      to={routes.report}
+                      className="z-10 text-[var(--c-primary-0)] font-[Lota]"
                     >
                       See All{" "}
                       <ArrowForwardIcon
@@ -210,21 +195,24 @@ export default function Dashboard() {
                   )}
                 </Box>
 
-                {loading && users.length === 0 ? (
+                {modalLoading && reports.length === 0 ? (
                   <TablePreloader />
                 ) : (
-                  <Table
-                    {...{
-                      data,
-                      pagination: { ...pagination, hidden: true },
-                      // setPagination: (d) => dispatch(setPagination(d)),
-                      isLoading: loading,
-                      tableMsg: [
-                        "No User created,",
-                        "Kindly check back later.",
-                      ],
-                    }}
-                  />
+                  <div className="md:w-full mb-10 w-[93vw]">
+                    <Table
+                      {...{
+                        // setPagination,
+                        data,
+                        pagination: { ...pagination, hidden: true },
+                        // setPagination: (d) => dispatch(setPagination(d)),
+                        isLoading: modalLoading,
+                        tableMsg: [
+                          "No User created,",
+                          "Kindly check back later.",
+                        ],
+                      }}
+                    />
+                  </div>
                 )}
               </Container>
             </div>

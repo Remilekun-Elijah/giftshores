@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { MongooseFindByReference } = require("mongoose-find-by-reference");
+const dayjs = require("dayjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -28,13 +30,15 @@ const giftSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    via: {
+    via: String,
+    dateAdded: {
       type: String,
-      default: "mail"
-    }
+      default: dayjs(Date.now()).format("DD/MM/YYYY"),
+    },
   },
   { timestamps: true }
 );
 
+giftSchema.plugin(MongooseFindByReference);
 exports.UserModel = mongoose.model("users", userSchema);
 exports.GiftModel = mongoose.model("gifts", giftSchema);

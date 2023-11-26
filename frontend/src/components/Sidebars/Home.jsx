@@ -208,7 +208,7 @@ export default function HomeSidebar(props) {
       </Box>
 
       <Box
-        className=""
+        className="bg-[#fff]"
         component="main"
         sx={{
           flexGrow: 1,

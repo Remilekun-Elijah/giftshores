@@ -1,32 +1,89 @@
-const { UserModel, GiftModel } = require("../models/user");
+const { GiftModel } = require("../models/user");
+const dayjs = require("dayjs");
 
-  exports.getReport = async (req, res, next) => {
-    const docs = await GiftModel.find().populate("owner", "-password");
+exports.getReport = async (req, res, next) => {
+  let { pageSize, pageNumber, gender } = req.query;
 
-    res.json({
-      success: true,
-      message: "report retrieved",
-      data: docs
+  pageSize = pageSize || Infinity;
+  pageNumber = pageNumber > 0 ? pageNumber - 1 : 0;
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  const createdAt = dayjs(date).subtract(2, "day").toISOString();
+
+  console.log(createdAt);
+  const docs = await GiftModel.find({})
+    .populate("owner", "-password")
+    .limit(Number(pageSize))
+    .skip(pageNumber * pageSize)
+    .sort({
+      createdAt: -1,
     })
-}
+    .exec();
 
-exports.getStats = async (req, res,next) => {
-const stats= {}
+  const pageCount = await GiftModel.countDocuments(),
+    data = {
+      reports: docs,
+      totalPages: Math.ceil(pageCount / pageSize) || 1,
+      page: parseInt(pageNumber) + 1,
+      perPage: docs.length,
+      count: pageCount,
+    };
+
+  res.json({
+    success: true,
+    message: "report retrieved",
+    data: data,
+  });
+};
+
+exports.getStats = async (req, res, next) => {
+  const stats = {};
   const gifts = await GiftModel.find({}).populate("owner", "-password");
   // GENDER
-  stats.totalMale = gifts.filter(gift=>gift.owner.gender==='male').length
-  stats.totalFemale = gifts.filter(gift=>gift.owner.gender==='female').length
-  stats.totalNonBinary = gifts.filter(gift=>gift.owner.gender==='non-binary').length
-  
+  stats.totalMale = gifts.filter((gift) => gift.owner.gender === "male").length;
+  stats.totalFemale = gifts.filter(
+    (gift) => gift.owner.gender === "female"
+  ).length;
+  stats.totalNonBinary = gifts.filter(
+    (gift) => gift.owner.gender === "non-binary"
+  ).length;
+
   // SEND STATUS
-  stats.totalSent = gifts.filter(gift=>gift.isSent===true).length
-  stats.totalUnsent = gifts.filter(gift=>gift.isSent===false).length
-  stats.totalSharedToWhatsapp = gifts.filter(gift=>gift.via==="whatsapp").length
-  stats.totalSentToMail = gifts.filter(gift=>gift.via==="mail").length
+  stats.totalSent = gifts.filter((gift) => gift.isSent === true).length;
+  stats.totalUnsent = gifts.filter((gift) => gift.isSent === false).length;
+  stats.totalSharedToWhatsapp = gifts.filter(
+    (gift) => gift.via === "whatsapp"
+  ).length;
+  stats.totalSentToMail = gifts.filter((gift) => gift.via === "mail").length;
+
+  stats.totalReport = gifts.length;
+
+  const analytics = await GiftModel.aggregate([
+    {
+      $match: {
+        dateAdded: {
+          $gte: dayjs(dayjs().startOf("month").toISOString()).format(
+            "DD/MM/YYYY"
+          ),
+        },
+      },
+    },
+    {
+      $lookup: {
+        foreignField: "_id",
+        localField: "owner",
+        from: "users",
+        as: "user",
+      },
+    },
+    {
+      $group: { _id: "$dateAdded", totalCount: { $sum: 1 } },
+    },
+  ]);
 
   res.json({
     success: true,
     message: "Stats retrieved successfully",
-    data: stats
-  })
-}
+    data: { stats, analytics },
+  });
+};

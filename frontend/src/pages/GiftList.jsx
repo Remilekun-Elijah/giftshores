@@ -13,7 +13,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Textarea } from "@material-tailwind/react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -34,7 +34,7 @@ import {
   sendGift,
   sendToWhatsapp,
 } from "../features/userSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import countries from "../utils/countries";
 import config from "../utils/config";
 
@@ -69,6 +69,7 @@ const GiftList = () => {
     } = useFormik({
       validationSchema: vCreateUser,
       initialValues: payload,
+      // eslint-disable-next-line no-unused-vars
       onSubmit: async ({ purpose, ...values }) => {
         const res = await dispatch(createUser(values)).unwrap();
         res.success && setStep(step + 1);
@@ -178,9 +179,9 @@ Giftshores
   );
 
   const handleShare = async () => {
-    const res = await dispatch(sendToWhatsapp({url: whatsappUrl})).unwrap()
-    res?.success && window.open(whatsappUrl)
-  }
+    const res = await dispatch(sendToWhatsapp({ url: whatsappUrl })).unwrap();
+    res?.success && window.open(whatsappUrl);
+  };
   return (
     <div className="md:h-screen bg-[#eee]">
       <Navbar />
