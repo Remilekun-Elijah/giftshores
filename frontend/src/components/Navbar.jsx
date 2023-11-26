@@ -13,7 +13,10 @@ import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const pages = [{ name: "Create List", url: "/create-list" }];
+const pages = [
+  { name: "Create List", url: "/create-list" },
+  { name: "Dashboard", url: "/dashboard" },
+];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -88,7 +91,7 @@ const Navbar = () => {
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{
-                  display: { xs: "block", md: "none" },
+                  display: { xs: "block", gap: 2, md: "none" },
                 }}
               >
                 {pages.map((p) => (
@@ -135,6 +138,7 @@ const Navbar = () => {
             <Box
               sx={{
                 flexGrow: 1,
+                gap: 2,
                 display: { xs: "none", md: "flex", justifyContent: "flex-end" },
               }}
             >

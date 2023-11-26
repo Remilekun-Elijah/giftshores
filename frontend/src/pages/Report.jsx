@@ -59,7 +59,7 @@ const Report = () => {
           <div className="col-span-2 lg:mb-0 mb-6">
             <SearchBar
               {...{
-                onChange: (_) => {},
+                onChange: () => {},
                 placeholder: "Search by name or staff id...",
               }}
             />
