@@ -1,7 +1,6 @@
-exports.dbUrl =
-  "mongodb+srv://remilekunelijah:09023007389@prod.cudwsqi.mongodb.net/giftshores";
-exports.smtp_secret = "wusoofbqxubyuwlp";
-exports.smtp_user = "giftshores@gmail.com";
-exports.smtp_from = "giftshores@gmail.com";
+exports.dbUrl = process.env.DB_URL;
+exports.smtp_secret = process.env.SMTP_SECRET;
+exports.smtp_user = process.env.SMTP_USER;
+exports.smtp_from = process.env.SMTP_FROM;
 exports.application_name = "GIFT SHORES";
-exports.smtp_host = "gmail";
+exports.smtp_host = process.env.SMTP_HOST;
