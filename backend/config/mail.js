@@ -1,10 +1,16 @@
 const path = require("path");
-const config = require("./index");
 const nodemailer = require("nodemailer");
 const { info, error, success } = require("consola");
 const { sendGiftTemplate } = require("../email/gift");
-
 exports.sendMail = async function (message) {
+  const config = {
+    smtp_secret: process.env.SMTP_SECRET,
+    smtp_user: process.env.SMTP_USER,
+    smtp_from: process.env.SMTP_FROM,
+    application_name: "GIFT SHORES",
+    smtp_host: process.env.SMTP_HOST,
+  };
+  console.log(config);
   info("sending mail to", message.to + "...");
   const transporter = nodemailer.createTransport({
     service: "gmail",

@@ -4,16 +4,17 @@ const express = require("express"),
   apiVersion = "/v1",
   route = require("./routes/index"),
   app = express(),
+  path = require("path"),
   mongoose = require("mongoose"),
   consola = require("consola"),
   config = require("./config/index");
 
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === "development") {
+if (app.get("env") === "development") {
   require("dotenv").config({
-    path: "./.env",
+    path: path.join(__dirname, ".env"),
   });
 }
+// console.log(app.get("env"));
 app.use(
   express.json({
     limit: "50mb",
@@ -79,7 +80,7 @@ const connect = async (conString) => {
       }
     });
 };
-connect(config.dbUrl);
+connect(process.env.DB_URL);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   consola.info(`Server started on port ${port} 🚀`);
