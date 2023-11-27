@@ -10,13 +10,17 @@ const userSchema = new mongoose.Schema(
     country: String,
     password: String,
     gender: String,
+    role: String,
   },
   { timestamps: true }
 );
 
 const giftSchema = new mongoose.Schema(
   {
-    gifts: Array,
+    gifts: {
+      type: Array,
+      default: [],
+    },
     purpose: String,
     owner: {
       type: mongoose.Types.ObjectId,
@@ -44,17 +48,19 @@ giftSchema.methods.findByGenderOrCountry = async (
   next
 ) => {
   const docs = await this.UserModel.find(filterA);
-
-  return await this.GiftModel.find({
+  const query = {
     owner: { $in: docs?.map((d) => d?._id) },
     ...filterB,
-  })
+  };
+  const result = await this.GiftModel.find(query)
     .populate("owner", "-password")
     .limit(limit)
     .skip(skip)
     .sort({
       createdAt: -1,
     });
+  const count = await this.GiftModel.countDocuments(query);
+  return { result, count };
 };
 
 giftSchema.plugin(MongooseFindByReference);

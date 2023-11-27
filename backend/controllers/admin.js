@@ -1,8 +1,20 @@
 const { GiftModel } = require("../models/user");
 const dayjs = require("dayjs");
+const json2xls = require("json2xls");
 
+const returnSearch = (words) => {
+  return {
+    $regex: new RegExp(`.*${words}*.`),
+    $options: "i",
+  };
+};
 exports.getReport = async (req, res, next) => {
-  let { pageSize, pageNumber, gender, country, isSent, via } = req.query;
+  let { search, pageSize, pageNumber, gender, country, isSent, via, ...date } =
+    req.query;
+
+  const firstName = search && returnSearch(search?.split(" ")[0] || ""),
+    lastName =
+      search?.split(" ")[1] && returnSearch(search?.split(" ")[1] || "");
 
   pageSize = pageSize || Infinity;
   pageNumber = pageNumber > 0 ? pageNumber - 1 : 0;
@@ -10,21 +22,33 @@ exports.getReport = async (req, res, next) => {
     skip = pageNumber * pageSize;
   let docs,
     filterA = {},
-    filterB = {};
+    filterB = {},
+    pageCount;
 
   if (gender) filterA.gender = gender;
   if (country) filterA.country = country;
   if (isSent) filterB.isSent = isSent;
   if (via) filterB.via = via;
+  if (via) filterB.via = via;
+  if (search) filterA.$or = [{ firstName }, { lastName: firstName }];
+  if (search && search.split(" ")[1])
+    filterA.$or = [{ firstName }, { lastName }];
+  if (date.startDate && date.endDate) {
+    filterB.createdAt = { $gte: date.startDate, $lte: date.endDate };
+  }
 
   const giftModel = new GiftModel();
-  if (gender || country) {
-    docs = await giftModel.findByGenderOrCountry({
+  if (gender || country || search) {
+    const filtered = await giftModel.findByGenderOrCountry({
       filterA,
       filterB,
       limit,
       skip,
+      pageCount,
     });
+    const { result, count } = filtered;
+    docs = result;
+    pageCount = count;
   } else {
     docs = await GiftModel.find(filterB)
       .populate("owner", "-password")
@@ -33,23 +57,39 @@ exports.getReport = async (req, res, next) => {
       .sort({
         createdAt: -1,
       });
-    // .exec();
+    pageCount = await GiftModel.countDocuments({ ...filterB });
   }
 
-  const pageCount = await GiftModel.countDocuments(),
-    data = {
-      reports: docs,
-      // totalPages: Math.ceil(pageCount / pageSize) || 1,
-      // page: parseInt(pageNumber) + 1,
-      perPage: docs.length,
-      count: pageCount,
-    };
+  const data = {
+    reports: docs,
+    perPage: docs.length,
+    count: pageCount,
+  };
 
-  res.json({
-    success: true,
-    message: "report retrieved",
-    data: data,
-  });
+  if (req.query.download) {
+    const jsonArr = docs.map(({ owner, _doc }) => {
+    
+      return {
+        NAME: owner.firstName + " " + owner.lastName,
+        "EMAIL ADDRESS": owner.email,
+        GENDER: owner.gender,
+        COUNTRY: owner.country,
+        GIFTS: _doc.gifts.join(", "),
+        PURPOSE: _doc.purpose,
+        STATUS: _doc.isSent ? "Sent" : "Not Sent",
+        "SENT VIA": _doc.via,
+        DATE: dayjs(_doc.createAt).format("DD/MM/YYYY"),
+        RECEIVERS: _doc.recipients.join(", "),
+      };
+    });
+    res.xls("reports.xlsx", jsonArr);
+  } else {
+    res.json({
+      success: true,
+      message: "report retrieved",
+      data: data,
+    });
+  }
 };
 
 exports.getStats = async (req, res, next) => {
@@ -86,6 +126,9 @@ exports.getStats = async (req, res, next) => {
     },
     {
       $group: { _id: "$dateAdded", totalCount: { $sum: 1 } },
+    },
+    {
+      $sort: { _id: 1 },
     },
   ]);
 

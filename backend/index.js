@@ -1,8 +1,7 @@
 const express = require("express"),
-  // path = require("path"),
+  json2xls = require("json2xls"),
   cors = require("cors"),
   apiVersion = "/v1",
-  // { HTTP_OK } = require("./config/http.status.code"),
   route = require("./routes/index"),
   app = express(),
   mongoose = require("mongoose"),
@@ -21,19 +20,17 @@ app.use(
   })
 );
 
-// app.use(express.static(path.resolve(__dirname, "../public")));
-// app.set("view engine", "ejs");
-// app.set("views", path.resolve("views"));
 app.use(cors("*"));
 
 app.get(apiVersion, (req, res, next) => {
   res.json({
-    name: "giftshores-service",
+    name: "Giftshores Service",
     version: "1.0.0",
-    status: true,
+    success: true,
   });
 });
 
+app.use(json2xls.middleware);
 app.use(apiVersion, route);
 
 app.use("*", (req, res, next) => {
@@ -48,6 +45,7 @@ app.use((err, req, res, next) => {
     success: true,
     message: "Internal server error",
     error: err.message,
+    stack: err.stack,
   });
 });
 let retry = 0;

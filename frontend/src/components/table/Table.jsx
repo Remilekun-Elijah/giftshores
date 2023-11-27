@@ -24,6 +24,10 @@ export default function CustomTable({
   const checkbox = useRef();
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
+
+  const handleFilter = (e) => !["", null, undefined].includes(e);
+
+  console.log(Object.values(pagination.filter).filter(handleFilter));
   useLayoutEffect(() => {
     if (checkboxAction) {
       const isIndeterminate =
@@ -111,14 +115,14 @@ export default function CustomTable({
                       </tr>
                     </thead>
                     {!isLoading && (
-                      <tbody className="divide-y divide-gray-200 bg-white ">
+                      <tbody className="divide-y divide-gray-200 bg-white z-20">
                         {data?.map((res, i) => {
                           const dataId = res?._data;
                           return (
                             <tr
                               key={i}
                               className={classNames(
-                                `hover:bg-grey_4`,
+                                `hover:bg-grey_4 z-20`,
                                 checkboxAction?.values?.includes(dataId)
                                   ? "bg-gray-50"
                                   : undefined
@@ -197,10 +201,10 @@ export default function CustomTable({
                                 <>
                                   {action?.visible &&
                                     ["text", "icon"].includes(action?.type) && (
-                                      <td className="whitespace-nowrap py- pl-3 pr-4 text-start text-sm font-medium sm:pr-3">
+                                      <td className="whitespace-nowrap pl-3 pr-4 z-20 text-start text-sm font-medium  sm:pr-3 ">
                                         <a
                                           href="#"
-                                          className="text-grey_2 hover:text-gray-600"
+                                          className="z-20 icon text-grey_2 hover:text-gray-600 "
                                           onClick={(e) =>
                                             action.action?.(e, res)
                                           }
@@ -246,31 +250,39 @@ export default function CustomTable({
               <Loader />
             </div>
           )}
-          {!isLoading && !pagination.total && pagination.search ? (
-            <div className="flex my-5 items-center justify-center w-full">
-              <h3 className="text-center">No record found</h3>
-            </div>
-          ) : (
-            !isLoading &&
-            !pagination.total && (
+          {!isLoading &&
+            !pagination.total &&
+            (pagination.search ||
+              Object.values(pagination.filter).filter(handleFilter).length ||
+              (pagination.startDate && pagination.endDate)) && (
               <div className="text-center py-20 bg-[#EAEAEA4D]">
                 <div className="flex justify-center mt-0 items-center flex-col">
                   <img
                     src="./empty_folder.svg"
-                    className="my-0 py-0"
+                    className="my-0 py-0 h-[200px] w-[180px]"
                     alt="empty state"
                   />
-                  <p className="leading-5 text-[#71717A] text-lg">
-                    {tableMsg?.[1] ||
-                      "No record found for this page at the moment."}
-                  </p>
-                  <p className="leading-8 text-[#71717A] text-lg">
-                    {tableMsg?.[2] || "Kindly check back later."}
-                  </p>
+                  {pagination.search ||
+                  Object.values(pagination.filter).filter(handleFilter)
+                    .length ||
+                  (pagination.startDate && pagination.endDate) ? (
+                    <p className="leading-5 text-[#71717A] text-lg">
+                      {tableMsg?.[1] || "No record found."}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="leading-5 text-[#71717A] text-lg">
+                        {tableMsg?.[1] ||
+                          "No record found for this page at the moment."}
+                      </p>
+                      <p className="leading-8 text-[#71717A] text-lg">
+                        {tableMsg?.[2] || "Kindly check back later."}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
-            )
-          )}
+            )}
           {pagination.total ? (
             <div
               className={`w-full mb-10 mt-3 px-4 py-3 rounded-b-lg bg-[#F9F9F9] ${

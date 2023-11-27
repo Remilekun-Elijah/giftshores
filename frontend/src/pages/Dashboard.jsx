@@ -76,7 +76,7 @@ export default function Dashboard() {
   const data = reports?.map(({ createdAt, owner, isSent, via }) => ({
     name: owner?.firstName + " " + owner?.lastName,
     email: owner?.email || "N/A",
-    gender: owner?.gender || "N/A",
+    gender: owner.gender ? capitalize(owner.gender) : "N/A",
     country: owner?.country || "N/A",
     via: via ? capitalize(via) : "N/A",
     "Date Created": dayjs(createdAt).format("MMM DD, YYYY"),
@@ -180,11 +180,11 @@ export default function Dashboard() {
                 sx={{ px: 0 }}
               >
                 <Box className="flex justify-between mb-2">
-                  <Typography fontFamily={"Lota"}>All Reports</Typography>
+                  <Typography>All Reports</Typography>
                   {reports.length > 0 && (
                     <Link
                       to={routes.report}
-                      className="z-10 text-[var(--c-primary-0)] font-[Lota]"
+                      className="z-10 text-[var(--c-primary-0)]"
                     >
                       See All{" "}
                       <ArrowForwardIcon

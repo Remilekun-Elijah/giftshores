@@ -1,6 +1,7 @@
 thead tr {
   background: var(--C_white);
   height: 50px;
+  z-index: 99;
 }
 
 tbody tr {
@@ -26,6 +27,7 @@ thead th {
   padding-left: 13px;
   /* height: 60px; */
   color: var(--C_black_lite);
+  z-index: 30;
 }
 
 .td button {
@@ -34,15 +36,31 @@ thead th {
 }
 
 tbody tr {
-  /* border-radius: 60px !important; */
+  z-index: 60 !important;
+
 }
 
 table tbody .icon {
   font-size: 16px;
   color: #85888c;
+  z-index: 30;
 }
 
 table tbody .icon:hover {
   cursor: pointer;
   color: var(--C_black);
+  z-index: 30;
+
+}
+
+tbody td a svg path {
+  z-index: 99 !important
+}
+
+tbody td a svg {
+  z-index: 99 !important
+}
+
+tbody td {
+  z-index: 99 !important
 }

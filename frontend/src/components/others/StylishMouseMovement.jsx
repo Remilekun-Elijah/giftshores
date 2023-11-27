@@ -36,7 +36,12 @@ const StylishMouseMovement = () => {
       ref.moveTo(innerWidth / 2, innerHeight / 2)
     );
 
-    const onMove = ({ clientX, clientY }) => {
+    const onMove = (e) => {
+      const { clientX, clientY } = e;
+      // console.log(e.target.tagName);
+      if (e.target.tagName === "a") {
+        document.querySelector(".__stylish_circle").style.display = "none";
+      }
       circleRefs.current.forEach((ref) => ref.moveTo(clientX, clientY));
     };
 
@@ -52,10 +57,10 @@ const StylishMouseMovement = () => {
   };
 
   return (
-    <div className="md:block hidden">
-      <Circle size="sm" ref={addCircleRef} delay={0} />
-      <Circle size="md" ref={addCircleRef} delay={0.1} />
-      <Circle size="lg" ref={addCircleRef} delay={0.2} />
+    <div className="md:block hidden z-[2]">
+      {/* <Circle size="sm" ref={addCircleRef} delay={0} /> */}
+      {/* <Circle size="md" ref={addCircleRef} delay={0.1} />
+      <Circle size="lg" ref={addCircleRef} delay={0.2} /> */}
     </div>
   );
 };

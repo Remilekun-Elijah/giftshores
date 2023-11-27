@@ -14,6 +14,12 @@ import { capitalize } from "../utils/helper";
 import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import FilterModal from "../components/Modals/Filter";
+import DateRangePicker from "../components/DatePicker";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DownloadModal from "../components/Modals/Download";
+import ViewModal from "../components/Modals/View";
 
 const Report = () => {
   const dispatch = useDispatch();
@@ -23,22 +29,59 @@ const Report = () => {
 
       reports,
     } = useSelector(getDashboardData),
-    [open, setOpen] = useState(false);
+    [selectedData, setSelectedData] = useState({}),
+    [open, setOpen] = useState(false),
+    [open1, setOpen1] = useState(false),
+    [open2, setOpen2] = useState(false);
 
   useEffect(() => {
-    Promise.all([dispatch(getReport())]);
-  }, [pagination.page]);
+    dispatch(setPagination({ page: 1, endDate: null }));
+  }, []);
 
-  const data = reports?.map(({ createdAt, owner, isSent, via }) => ({
-    name: owner.firstName + " " + owner.lastName,
-    email: owner?.email || "N/A",
-    gender: owner.gender || "N/A",
-    country: owner.country || "N/A",
-    via: via ? capitalize(via) : "N/A",
-    "Date Created": dayjs(createdAt).format("MMM DD, YYYY"),
-    Status: isSent ? "Sent" : "Not Sent",
-    // _data: user,
-  }));
+  useEffect(() => {
+    let cb = () => {};
+    if (pagination?.search) {
+      dispatch(setPagination({ page: 1 }));
+      cb = setTimeout(() => Promise.all([dispatch(getReport({}))]), 700);
+    } else cb = Promise.all([dispatch(getReport({}))]);
+
+    return () => {
+      clearTimeout(cb);
+    };
+  }, [
+    pagination.page,
+    pagination.search,
+    pagination.startDate && pagination.endDate,
+  ]);
+
+  const data = reports?.map((report) => {
+    const { createdAt, owner, isSent, via } = report;
+    return {
+      name: owner.firstName + " " + owner.lastName,
+      email: owner?.email || "N/A",
+      gender: owner.gender ? capitalize(owner.gender) : "N/A",
+      country: owner.country || "N/A",
+      via: via ? capitalize(via) : "N/A",
+      "Date Created": dayjs(createdAt).format("MMM DD, YYYY"),
+      Status: isSent ? "Sent" : "Not Sent",
+      _data: report,
+    };
+  });
+
+  const setDate = (date) => {
+    const [start, end] = date;
+    dispatch(setPagination({ startDate: start, endDate: end }));
+  };
+
+  const dropdownData = {
+    visible: true,
+    type: "icon",
+    icon: <VisibilityIcon className="z-20" />,
+    action: (_, state) => {
+      setSelectedData(state?._data);
+      setOpen2(true);
+    },
+  };
 
   return (
     <HomeLayout>
@@ -55,74 +98,88 @@ const Report = () => {
           Reports
         </Typography>
 
-        <div className="lg:grid lg:grid-cols-3 mb-8">
-          <div className="col-span-2 lg:mb-0 mb-6">
+        <div className="lg:grid lg:grid-cols-2 mb-8">
+          <div className="col-span-1 lg:mb-0 mb-6">
             <SearchBar
               {...{
-                onChange: () => {},
-                placeholder: "Search by name or staff id...",
+                value: pagination.search,
+                onChange: ({ target: { value } }) =>
+                  dispatch(setPagination({ search: value.trim() })),
+                placeholder: "Search by name...",
               }}
             />
           </div>
-          <div className="grid grid-cols-2 gap-8 items-center col-span-1">
+          <div className="grid xl:grid-cols-3 grid-cols-2 flex-wrap gap-5 items-center col-span-1">
             <Button
-              // disabled={loading}
-              // component={Link}
-              // to={config.routes.uploadUsers}
+              startIcon={<FilterAltIcon />}
               onClick={() => setOpen(true)}
               sx={{
                 textTransform: "capitalize",
-                borderRadius: ".5em",
-                p: "0px",
-                bgcolor: "#975F94",
+                py: "22px",
+                bgcolor: "purple",
                 color: "white",
                 "&:hover": { bgcolor: "purple" },
               }}
               variant="contained"
               size="small"
-              className="h-[42px] z-10 font-[500] md:text-[15px] text-[10px] rounded-[10px] "
+              className="h-[40px] z-10 font-[500] md:text-[15px] text-[10px] rounded"
             >
               {" "}
               FILTER
             </Button>
 
-            {/* <Button
-              disabled={loading}
-              component={Link}
-              to={config.routes.createUser}
+            <Button
+              startIcon={<CloudDownloadIcon />}
+              onClick={() => setOpen1(true)}
               sx={{
                 textTransform: "capitalize",
-                borderRadius: ".5em",
-                p: "0px",
+                py: "22px",
+                bgcolor: "#C298B4",
+                border: "1px solid purple",
+                color: "white",
+                "&:hover": { bgcolor: "purple", color: "white" },
               }}
-              variant="text"
+              variant="contained"
               size="small"
-              className="h-[42px] font-[500] md:text-[15px] text-[10px] rounded-[10px] text-white py-0 bg-[#D70900] hover:bg-[#FF5C5C]"
+              className="h-[40px] border-2 border-[purple] z-10 font-[500] md:text-[15px] text-[10px] rounded"
             >
               {" "}
-              Create New User
-            </Button> */}
+              DOWNLOAD
+            </Button>
+
+            <div className="z-10">
+              <DateRangePicker
+                selected={pagination.startDate}
+                onChange={setDate}
+                startDate={pagination.startDate}
+                endDate={pagination.endDate}
+                selectsRange
+                isClearable={true}
+              />
+            </div>
           </div>
         </div>
 
         {modalLoading && reports.length === 0 ? (
           <TablePreloader />
         ) : (
-          <div className="sm:w-full w-[93vw]">
+          <div className="md:w-full w-[93vw]">
             <CustomTable
               {...{
                 data,
                 pagination,
                 setPagination: (d) => dispatch(setPagination(d)),
                 isLoading: modalLoading,
-                tableMsg: ["No Record created,", "Kindly check back later."],
+                action: dropdownData,
               }}
             />
           </div>
         )}
       </div>
 
-      <FilterModal {...{ open, setOpen }} />
+      <FilterModal {...{ open, setOpen, pagination }} />
+      <DownloadModal {...{ open: open1, setOpen: setOpen1, pagination }} />
+      <ViewModal {...{ open: open2, setOpen: setOpen2, data: selectedData }} />
     </HomeLayout>
   );
 };

@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../utils/config";
 import Storage from "../utils/storage";
 import BACKEND from "../utils/backend";
+import dayjs from "dayjs";
 
 export const getDashboardStats = createAsyncThunk(
   "/admin/getDashboard",
@@ -20,14 +21,28 @@ export const getDashboardStats = createAsyncThunk(
 
 export const getReport = createAsyncThunk(
   "/admin/getReport",
-  async ({ pageSize } = {}, thunkAPI) => {
-    const { pagination } = thunkAPI.getState().dashboard;
+  async (prop, thunkAPI) => {
+    const {
+      pagination: {
+        page,
+        pageSize,
+        search,
+        startDate,
+        endDate,
+        filter: { via, isSent, gender, country },
+      },
+    } = thunkAPI.getState().dashboard;
+    const url = `/admin/report/?pageNumber=${page}&pageSize=${
+      prop.pageSize || pageSize
+    }&search=${search || ""}&gender=${gender || ""}&country=${
+      country || ""
+    }&isSent=${isSent === null ? "" : isSent}&startDate=${
+      startDate ? dayjs(startDate).toISOString() : ""
+    }&endDate=${endDate ? dayjs(endDate).toISOString() : ""}&via=${via || ""}`;
     try {
       return new BACKEND().send({
         type: "get",
-        to: `/admin/report/?pageNumber=${pagination.page}&pageSize=${
-          pageSize || pagination.pageSize
-        }&search=${pagination.search || pagination.filter || ""}`,
+        to: url,
         useAlert: false,
       });
     } catch (error) {
@@ -37,20 +52,7 @@ export const getReport = createAsyncThunk(
 );
 
 const initialState = {
-  analytics: [
-    {
-      date: "01/11/2023",
-      early: 6,
-    },
-    {
-      date: "02/11/2023",
-      early: 3,
-    },
-    {
-      date: "01/20/2023",
-      late: 2,
-    },
-  ],
+  analytics: [],
   reports: [],
   userId: "",
   giftId: "",
@@ -64,7 +66,14 @@ const initialState = {
     total: 0,
     length: 0,
     search: "",
-    filter: "",
+    filter: {
+      country: "",
+      gender: "",
+      isSent: null,
+      via: "",
+    },
+    startDate: new Date(),
+    endDate: null,
   },
 };
 
@@ -74,6 +83,14 @@ export const dashboardSlice = createSlice({
   reducers: {
     setPagination: (state, { payload }) => {
       state.pagination = { ...state.pagination, ...payload };
+    },
+    clearFilter: (state) => {
+      state.pagination.filter = {
+        country: "",
+        gender: "",
+        isSent: null,
+        via: "",
+      };
     },
   },
   extraReducers: (builder) => {
@@ -100,7 +117,7 @@ export const dashboardSlice = createSlice({
       })
       .addCase(getReport.fulfilled, (state, { payload }) => {
         state.modalLoading = false;
-        if (payload.success) {
+        if (payload?.success) {
           state.reports = payload?.data?.reports;
 
           state.pagination.total = payload.data.count;
@@ -116,5 +133,5 @@ export const dashboardSlice = createSlice({
 });
 
 export const getDashboardData = (state) => state.dashboard;
-export const { setPagination } = dashboardSlice.actions;
+export const { setPagination, clearFilter } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

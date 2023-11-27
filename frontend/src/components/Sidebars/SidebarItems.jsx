@@ -56,11 +56,7 @@ const SidebarItems = ({ link }) => {
             </ListItemIcon>
             <ListItemText
               disableTypography
-              primary={
-                <Typography sx={{ fontFamily: "SofiaPro" }}>
-                  {link.name}
-                </Typography>
-              }
+              primary={<Typography>{link.name}</Typography>}
             />
           </ListItemButton>
         </ListItem>
