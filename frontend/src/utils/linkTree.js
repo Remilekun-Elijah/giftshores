@@ -15,12 +15,12 @@ const links = [
     url: routes.dashboard,
     icon: DashboardIcon,
   },
-  {
-    authorizedUsers: ["all"],
-    name: "Users",
-    url: routes.user,
-    icon: GroupIcon,
-  },
+  // {
+  //   authorizedUsers: ["all"],
+  //   name: "Users",
+  //   url: routes.user,
+  //   icon: GroupIcon,
+  // },
 
   {
     authorizedUsers: ["all"],

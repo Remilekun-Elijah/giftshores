@@ -115,7 +115,7 @@ exports.sendGift = async (req, res, next) => {
         data: {
           name: `${gift.owner.firstName} ${gift.owner.lastName}`,
           gifts: gift.gifts,
-          host: req.hostname,
+          host: "https://www.giftshores.com/",
         },
       })
         .then((err) => {

@@ -27,7 +27,6 @@ export default function CustomTable({
 
   const handleFilter = (e) => !["", null, undefined].includes(e);
 
-  console.log(Object.values(pagination.filter).filter(handleFilter));
   useLayoutEffect(() => {
     if (checkboxAction) {
       const isIndeterminate =

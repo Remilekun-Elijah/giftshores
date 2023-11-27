@@ -124,7 +124,7 @@ Hi there,\n
 Great news! ${values.firstName} ${
     values.lastName
   } has just shared a fantastic wishlist for their ${
-    values.purpose
+    values.purpose.toLowerCase() === "others" ? values.others : values.purpose
   }, and we thought you might want to join in on the fun.\n
 
 Check out their list: \r\n
