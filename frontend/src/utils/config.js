@@ -4,38 +4,40 @@ if (import.meta.env.MODE === "production") {
   // your code here
 }
 
-console.log(import.meta.env);
+// console.log(import.meta.env);
 
 const routes = {
   home: "/",
-  dashboard: "/dashboard",
+  dashboard: "/",
   create: "/create-list",
   user: "/users",
   report: "/reports",
 };
 
 environment.development = {
+  appUser: import.meta.env.VITE_APP_USER,
   authProps: ["g/token", "g/user"],
-  // backendUrl: "http://localhost:3000/v1",
-  backendUrl: "https://api-giftshores.onrender.com/v1",
+  backendUrl: "http://localhost:3000/v1",
   routes,
-  frontendUrl: "https://giftshores.vercel.app",
+  frontendUrl: "https://www.giftshores.com/",
 };
 
 environment.staging = {
   authProps: ["g/token", "g/user"],
   backendUrl: "https://api-giftshores.onrender.com/v1",
   routes,
-  frontendUrl: "https://giftshores.vercel.app/",
+  frontendUrl: "https://www.giftshores.com/",
 };
 
 environment.production = {
+  appUser: import.meta.env.VITE_APP_USER,
   authProps: ["g/token", "g/user"],
-  backendUrl:
-    // process.env.REACT_APP_BACKEND_URL || "http://104.248.172.21:8002/",
-    routes,
-  frontendUrl: "http://104.248.172.21:3001/",
+  backendUrl: "https://api-giftshores.onrender.com/v1",
+  routes,
+  frontendUrl: "https://www.giftshores.com/",
 };
-console.log(environment);
 
-export default environment["development"];
+const env = environment[import.meta.env.MODE];
+console.log(env);
+
+export default env;

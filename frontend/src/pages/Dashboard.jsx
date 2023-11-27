@@ -31,8 +31,6 @@ export default function Dashboard() {
       useSelector(getDashboardData),
     dispatch = useDispatch();
 
-  console.log(analytics);
-
   const statsMap = [
     {
       type: "Total Reports",

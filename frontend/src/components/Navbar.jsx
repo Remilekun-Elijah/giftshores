@@ -15,7 +15,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const pages = [
   { name: "Create List", url: "/create-list" },
-  { name: "Dashboard", url: "/dashboard" },
+  // { name: "Dashboard", url: "/dashboard" },
 ];
 
 const Navbar = () => {
