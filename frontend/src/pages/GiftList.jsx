@@ -27,6 +27,8 @@ import WestIcon from "@mui/icons-material/West";
 import SendIcon from "@mui/icons-material/Send";
 import { vCreateUser } from "../utils/validators";
 import { useDispatch, useSelector } from "react-redux";
+
+import NewNavBar from "../components/NewNavBar";
 import {
   createGift,
   createUser,
@@ -58,6 +60,7 @@ const GiftList = () => {
 
   const dispatch = useDispatch(),
     [step, setStep] = useState(0),
+
     {
       values,
       handleBlur,
@@ -75,6 +78,7 @@ const GiftList = () => {
         res.success && setStep(step + 1);
       },
     });
+
 
   const responsiveCss = {
     flexDirection: { sm: "row", sx: "column" },
@@ -133,10 +137,7 @@ Ready to create your own wishlist and spread the joy? Head over to ${
 Happy gifting! \n
 Giftshores
 `;
-  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-    message
-  )}`;
-
+  
   const btnGroped = (
     <>
       <LoadingButton
@@ -182,17 +183,26 @@ Giftshores
     const res = await dispatch(sendToWhatsapp({ url: whatsappUrl })).unwrap();
     res?.success && window.open(whatsappUrl);
   };
+
+
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+    message
+  )}`;
+
+  
+
   return (
     <div className="md:h-screen bg-[#eee]">
-      <Navbar />
+
+    <NewNavBar />
       <div className="flex justify-center items-center h-full md:mt-18 my-16">
         <Box
           className="img h-full flex flex-col  md:shadow-xl"
           sx={responsiveCss}
         >
           <img
-            className="md:h-full h-[70%] w-ful max-w-[400px] lg:w-full md:w-[40%] md:inline-block hidden"
-            src="./slide_2.jpg"
+            className="md:h-full h-[1000%] w-full max-w-[400px] lg:w-full md:w-[40%] md:inline-block hidden object-cover"
+            src="./slide_2.webp"
             alt=""
           />
           <Box className="h-full w-full py-5 flex flex-col justify-center max-w-[800px] bg-white">
@@ -207,6 +217,7 @@ Giftshores
                 </Step>
               ))}
             </Stepper>
+
             {step === 2 && (
               <div className="px-10 mt-2">
                 <div className="flex justify-center my-5">
@@ -252,8 +263,7 @@ Giftshores
                     ? "z-40 opacity-100"
                     : `z-0 opacity-0 ${step === 2 && "sm:block hidden"}`
                 }`}
-                onSubmit={handleSubmit}
-              >
+                onSubmit={handleSubmit}>
                 <FormControl className="w-full border-none lg:mt-5">
                   <TextField
                     className="w-full z-10 bg-[rgba(255,255,255,.5)]"
@@ -268,9 +278,7 @@ Giftshores
                     onBlur={handleBlur}
                     error={errors.firstName && touched.firstName}
                     helperText={
-                      errors.firstName && touched.firstName
-                        ? errors.firstName
-                        : ""
+                      errors.firstName && touched.firstName ? errors.firstName : ""
                     }
                   />
                 </FormControl>
@@ -290,9 +298,7 @@ Giftshores
                         onBlur={handleBlur}
                         error={errors.lastName && touched.lastName}
                         helperText={
-                          errors.lastName && touched.lastName
-                            ? errors.lastName
-                            : ""
+                          errors.lastName && touched.lastName ? errors.lastName : ""
                         }
                       />
                     </FormControl>
@@ -310,16 +316,13 @@ Giftshores
                         onChange={handleChange}
                         onBlur={handleBlur}
                         error={errors.email && touched.email}
-                        helperText={
-                          errors.email && touched.email ? errors.email : ""
-                        }
+                        helperText={errors.email && touched.email ? errors.email : ""}
                       />
                     </FormControl>
 
                     <FormControl
                       className="w-full border lg:mt-5 z-10 bg-[rgba(255,255,255,.5)]"
-                      variant="standard"
-                    >
+                      variant="standard">
                       <InputLabel id="country">Country</InputLabel>
                       <Select
                         labelId="country"
@@ -330,8 +333,7 @@ Giftshores
                         onChange={handleChange}
                         label="country"
                         onBlur={handleBlur}
-                        error={errors.country && touched.country}
-                      >
+                        error={errors.country && touched.country}>
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
@@ -346,8 +348,7 @@ Giftshores
                         <FormHelperText
                           variant="standard"
                           error={errors.country && touched.country}
-                          className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal"
-                        >
+                          className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal">
                           {errors.country}
                         </FormHelperText>
                       )}
@@ -377,8 +378,7 @@ Giftshores
                     <FormHelperText
                       variant="standard"
                       error={errors.purpose && touched.purpose}
-                      className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal"
-                    >
+                      className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal">
                       {errors.purpose}
                     </FormHelperText>
                   )}
@@ -390,8 +390,7 @@ Giftshores
                     row
                     aria-labelledby="gender"
                     value={values?.gender}
-                    name="gender"
-                  >
+                    name="gender">
                     <FormControlLabel
                       value="male"
                       onChange={handleChange}
@@ -415,8 +414,7 @@ Giftshores
                     <FormHelperText
                       variant="standard"
                       error={errors.gender && touched.gender}
-                      className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal"
-                    >
+                      className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal">
                       {errors.gender}
                     </FormHelperText>
                   )}
@@ -437,8 +435,7 @@ Giftshores
                       fontSize: "semibold",
                       color: "white",
                       background: "linear-gradient(to right, purple, #E491E8)",
-                    }}
-                  >
+                    }}>
                     {" "}
                     Next{" "}
                   </LoadingButton>
@@ -452,18 +449,14 @@ Giftshores
                 onSubmit={submit}
                 className={`grid items-center lg:grid-cols-3 transition-opacity px-10 absolute top-0 gap-10 m-auto w-full  ${
                   step === 1 ? "opacity-100 z-40" : "opacity-0 z-0 hidden"
-                }`}
-              >
+                }`}>
                 {Array(10)
                   .fill("")
                   .map((_, i) => {
                     const name = `name_${i}`;
 
                     return (
-                      <FormControl
-                        key={i}
-                        className="w-full border-none lg:mt-5"
-                      >
+                      <FormControl key={i} className="w-full border-none lg:mt-5">
                         <TextField
                           className="w-full z-10 bg-[rgba(255,255,255,.5)]"
                           id={name}
@@ -476,6 +469,7 @@ Giftshores
                       </FormControl>
                     );
                   })}
+
                 <Button
                   startIcon={<WestIcon />}
                   variant="text"
@@ -531,8 +525,7 @@ Giftshores
                 onSubmit={submit}
                 className={` transition-opacity px-10 absolute top-0 gap-10 m-auto w-full  ${
                   step === 2 ? "opacity-100 z-40" : "opacity-0 z-0 hidden"
-                }`}
-              >
+                }`}>
                 <FormControl className="w-full lg:mt-5 z-10 bg-[rgba(255,255,255,.5)]">
                   <Textarea
                     placeholder="Receivers email addresses separated by comma..."
@@ -556,8 +549,7 @@ Giftshores
                     <FormHelperText
                       variant="standard"
                       error={errors.recipients && touched.recipients}
-                      className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal"
-                    >
+                      className="py-1 bg-[#F8FAFC] text-[0.75rem] px-[14px] leading-[1.66] font-normal">
                       {errors.recipients}
                     </FormHelperText>
                   )}
@@ -577,8 +569,7 @@ Giftshores
                       color: "white",
                       background: "#333",
                     }}
-                    onClick={() => setStep(step - 1)}
-                  >
+                    onClick={() => setStep(step - 1)}>
                     {" "}
                     Previous{" "}
                   </LoadingButton>
@@ -599,8 +590,7 @@ Giftshores
                       fontSize: "semibold",
                       color: "white",
                       background: "linear-gradient(to right, purple, #E491E8)",
-                    }}
-                  >
+                    }}>
                     {" "}
                     Send To mail{" "}
                   </LoadingButton>
