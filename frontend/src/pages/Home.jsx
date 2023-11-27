@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div>
+
       {/* <Navbar /> */}
 
       <div className="bg-white">
@@ -17,6 +18,7 @@ const Home = () => {
                 <a href="#" title="" className="flex">
                   <img className="w-auto h-20" src="/logo.png" alt="" />
                 </a>
+
               </div>
 
               <button

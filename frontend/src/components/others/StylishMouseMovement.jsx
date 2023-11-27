@@ -52,7 +52,7 @@ const StylishMouseMovement = () => {
   };
 
   return (
-    <div>
+    <div className="md:block hidden">
       <Circle size="sm" ref={addCircleRef} delay={0} />
       <Circle size="md" ref={addCircleRef} delay={0.1} />
       <Circle size="lg" ref={addCircleRef} delay={0.2} />
