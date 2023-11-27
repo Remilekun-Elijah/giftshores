@@ -1,5 +1,5 @@
 import Storage from "./storage";
-import config from "./config";
+import config from "./config.js";
 
 /**
  * @param {object} data   takes in an object of boolean and number values
@@ -100,3 +100,28 @@ export const getMdaIdByName = (name, departments) =>
   departments.find(
     (branch) => branch?.department?.toLowerCase() === name?.toLowerCase()
   )?.id;
+
+
+  export const purposeList = [
+    "Anniversary",
+    "Birthday",
+    "Christmas",
+    "Valentine",
+    "Housewarming",
+    "Baby shower",
+    "Diwali",
+    "Eid",
+    "Father's day",
+    "Mother's day",
+    "New year",
+    "Wedding",
+    "Bridal shower",
+    "Halloween",
+    "Chinese New year",
+    "Christening",
+    "Easter",
+    "Hanukkah",
+    "New baby",
+    "Thanksgiving",
+    "Others",
+  ]

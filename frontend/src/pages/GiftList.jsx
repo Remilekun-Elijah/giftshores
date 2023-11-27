@@ -37,6 +37,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import countries from "../utils/countries";
 import config from "../utils/config";
+import { purposeList } from "../utils/helper";
 
 const steps = [
   "Select master blaster campaign settings",
@@ -65,12 +66,13 @@ const GiftList = () => {
       handleFocus,
       handleSubmit,
       errors,
+      setValues,
       touched,
     } = useFormik({
       validationSchema: vCreateUser,
       initialValues: payload,
       // eslint-disable-next-line no-unused-vars
-      onSubmit: async ({ purpose, ...values }) => {
+      onSubmit: async ({ purpose, others, ...values }) => {
         const res = await dispatch(createUser(values)).unwrap();
         res.success && setStep(step + 1);
       },
@@ -79,7 +81,7 @@ const GiftList = () => {
   const responsiveCss = {
     flexDirection: { sm: "row", sx: "column" },
     maxWidth: { lg: "80%", md: "90%", sm: "95%", xs: "100%" },
-    maxHeight: { xl: "85%", lg: "80%", md: "90%", sm: "90%", xs: "100%" },
+    maxHeight: { xl: "95%", lg: "100%", md: "90%", sm: "90%" },
     // height: { sm: "20px" },
   };
 
@@ -92,7 +94,10 @@ const GiftList = () => {
         const res = await dispatch(
           createGift({
             gifts: Object.values(model1).filter(Boolean),
-            purpose: values.purpose,
+            purpose:
+              values.purpose.toLowerCase() === "others"
+                ? values.others
+                : values.purpose,
           })
         ).unwrap();
 
@@ -113,7 +118,6 @@ const GiftList = () => {
   const formattedList = Object.values(model1)
     ?.filter(Boolean)
     .map((n, i) => `${i + 1}. ${n}\r\n`);
-  // ?.split("\n");
   let message = `
 Hi there,\n
 
@@ -180,7 +184,12 @@ Giftshores
 
   const handleShare = async () => {
     const res = await dispatch(sendToWhatsapp({ url: whatsappUrl })).unwrap();
-    res?.success && window.open(whatsappUrl);
+
+    if (res?.success) {
+      window.innerWidth > 740
+        ? open(whatsappUrl, "#openWhatsapp", "popup=1")
+        : (window.location.href = whatsappUrl);
+    }
   };
   return (
     <div className="md:h-screen bg-[#eee]">
@@ -195,7 +204,7 @@ Giftshores
             src="./slide_2.jpg"
             alt=""
           />
-          <Box className="h-full w-full py-5 flex flex-col justify-center max-w-[800px] bg-white">
+          <Box className="h-full w-full py-5 flex flex-col pt-10 max-w-[800px] bg-white">
             <h1 className="text-center text-3xl uppercase font-[600] mb-5">
               Gift Shores
             </h1>
@@ -355,24 +364,37 @@ Giftshores
                   </>
                 )}
 
-                <FormControl className="w-full lg:mt-5 z-10 bg-[rgba(255,255,255,.5)]">
-                  <Textarea
-                    placeholder="Purpose of Gift"
+                <FormControl
+                  className="w-full border lg:mt-5 z-10 bg-[rgba(255,255,255,.5)]"
+                  variant="standard"
+                >
+                  <InputLabel id="purpose">Purpose</InputLabel>
+                  <Select
+                    labelId="purpose"
                     id="purpose"
-                    value={values?.purpose}
-                    {...{
-                      onChange: handleChange,
-                      onBlur: handleBlur,
-                      onFocus: handleFocus,
+                    name="purpose"
+                    onFocus={handleFocus}
+                    value={values.purpose}
+                    onChange={(e) => {
+                      if (e.target.value.toLowerCase() === "others") {
+                        setValues({ ...values, others: "" });
+                      } else setValues({ ...values, others: "none" });
+                      handleChange(e);
                     }}
-                    rows="4"
-                    className="w-full border-b border-l border-purple-800 outline-none p-1 resize-none bg-[rgba(255,255,255,.5)]  h-full"
+                    label="purpose"
+                    onBlur={handleBlur}
                     error={errors.purpose && touched.purpose}
-                    color={errors.purpose && touched.purpose && "red"}
-                    variant="standard"
-                    cols={40}
-                    size="lg"
-                  />
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {purposeList.map((name, i) => (
+                      <MenuItem key={i} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+
                   {errors.purpose && touched.purpose && (
                     <FormHelperText
                       variant="standard"
@@ -383,6 +405,28 @@ Giftshores
                     </FormHelperText>
                   )}
                 </FormControl>
+
+                {values.purpose.toLowerCase() === "others" && (
+                  <FormControl className="w-full border-none lg:mt-5">
+                    <TextField
+                      className="w-full z-10 bg-[rgba(255,255,255,.5)]"
+                      id="others"
+                      label="Others"
+                      name="others"
+                      variant="standard"
+                      value={values.others}
+                      required
+                      placeholder="Enter other purpose"
+                      onFocus={handleFocus}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={errors.others && touched.others}
+                      helperText={
+                        errors.others && touched.others ? errors.others : ""
+                      }
+                    />
+                  </FormControl>
+                )}
 
                 <FormControl className="z-10 w-full">
                   <FormLabel id="gender">Gender</FormLabel>
@@ -420,29 +464,28 @@ Giftshores
                       {errors.gender}
                     </FormHelperText>
                   )}
-
-                  <LoadingButton
-                    {...{ loading }}
-                    endIcon={<EastIcon />}
-                    variant="text"
-                    type="submit"
-                    sx={{
-                      ".MuiLoadingButton-loadingIndicatorCenter": {
-                        color: "#fff !important",
-                      },
-                      mt: "1em",
-                      height: "2.3rem",
-                      alignItems: "center",
-                      px: "1em",
-                      fontSize: "semibold",
-                      color: "white",
-                      background: "linear-gradient(to right, purple, #E491E8)",
-                    }}
-                  >
-                    {" "}
-                    Next{" "}
-                  </LoadingButton>
                 </FormControl>
+                <LoadingButton
+                  {...{ loading }}
+                  endIcon={<EastIcon />}
+                  variant="text"
+                  type="submit"
+                  sx={{
+                    ".MuiLoadingButton-loadingIndicatorCenter": {
+                      color: "#fff !important",
+                    },
+                    // mt: "1em",
+                    height: "2.3rem",
+                    alignItems: "center",
+                    px: "1em",
+                    fontSize: "semibold",
+                    color: "white",
+                    background: "linear-gradient(to right, purple, #E491E8)",
+                  }}
+                >
+                  {" "}
+                  Next{" "}
+                </LoadingButton>
               </Box>
 
               {/* STEP 2 */}
@@ -496,7 +539,7 @@ Giftshores
 
                 <LoadingButton
                   {...{ loading }}
-                  className="__btn_res"
+                  className="__btn_res text-white"
                   endIcon={<EastIcon />}
                   variant="text"
                   type="submit"
@@ -510,7 +553,7 @@ Giftshores
                     alignItems: "center",
                     px: "1em",
                     fontSize: "semibold",
-                    color: "white",
+                    color: "#fff",
                     background: "linear-gradient(to right, purple, #E491E8)",
                   }}
                 >

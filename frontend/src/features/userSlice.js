@@ -84,12 +84,13 @@ export const sendToWhatsapp = createAsyncThunk(
 
 const initialState = {
   payload: {
-    firstName: "Remilekun",
-    lastName: "Elijah",
-    email: "remilekunelijah97@gmail.com",
-    country: "Nigeria",
-    gender: "male",
-    purpose: "New Year",
+    firstName: "",
+    lastName: "",
+    email: "",
+    country: "",
+    gender: "",
+    purpose: "",
+    others: "none",
   },
   userId: "",
   giftId: "",

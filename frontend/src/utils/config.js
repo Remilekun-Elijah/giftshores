@@ -1,5 +1,10 @@
 const environment = {};
-// const process = process;
+// import process from "process";
+if (import.meta.env.MODE === "production") {
+  // your code here
+}
+
+console.log(import.meta.env);
 
 const routes = {
   home: "/",
@@ -11,8 +16,8 @@ const routes = {
 
 environment.development = {
   authProps: ["g/token", "g/user"],
-  backendUrl: "https://api-giftshores.onrender.com/v1",
   // backendUrl: "http://localhost:3000/v1",
+  backendUrl: "https://api-giftshores.onrender.com/v1",
   routes,
   frontendUrl: "https://giftshores.vercel.app",
 };
@@ -26,9 +31,9 @@ environment.staging = {
 
 environment.production = {
   authProps: ["g/token", "g/user"],
-  // backendUrl:
-  //   process.env.REACT_APP_BACKEND_URL || "http://104.248.172.21:8002/",
-  routes,
+  backendUrl:
+    // process.env.REACT_APP_BACKEND_URL || "http://104.248.172.21:8002/",
+    routes,
   frontendUrl: "http://104.248.172.21:3001/",
 };
 console.log(environment);
