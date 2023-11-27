@@ -8,10 +8,12 @@ const express = require("express"),
   consola = require("consola"),
   config = require("./config/index");
 
-  console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === "development") {
   require("dotenv").config({
-  path: "./.env",
-});
+    path: "./.env",
+  });
+}
 app.use(
   express.json({
     limit: "50mb",
