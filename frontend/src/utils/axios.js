@@ -1,5 +1,5 @@
 import Alert from "./alert";
-import config from "./config";
+import config from "./config.js";
 import Storage from "./storage";
 
 class API_INSTANCE {

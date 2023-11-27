@@ -43,6 +43,7 @@ export const vCreateUser = Yup.object({
   country: Yup.string().required("Country is required"),
   gender: Yup.string().required("Gender is required"),
   purpose: Yup.string().required("Purpose of Gift is required"),
+  others: Yup.string().required("Others is required"),
 });
 
 export const vendorForm = Yup.object({

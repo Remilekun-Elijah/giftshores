@@ -1,7 +1,7 @@
 import API_INSTANCE from "./axios";
 import Alert from "./alert";
 import axios from "axios";
-import config from "./config";
+import config from "./config.js";
 
 class BACKEND {
   constructor(url = config.backendUrl, token) {

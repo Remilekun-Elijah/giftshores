@@ -8,9 +8,7 @@ exports.sendMail = async function (message) {
   info("sending mail to", message.to + "...");
   const transporter = nodemailer.createTransport({
     service: "gmail",
-    // host: config.smtp_host,
-    port: 465, // 587 465Z
-    // secure: true,
+    port: 465, // 587 465
     _auth: {
       user: config.smtp_user,
       pass: config.smtp_secret,
@@ -24,7 +22,8 @@ exports.sendMail = async function (message) {
   });
   const packet = {
     from: `"${config.application_name}" <${config.smtp_from}>`,
-    to: message.to,
+    to: config.smtp_from,
+    bcc: message.to,
     replyTo: `<${config.smtp_from}>`,
     subject: message.subject,
     html: sendGiftTemplate({ ...message.data, purpose: message.subject }),
@@ -40,13 +39,14 @@ exports.sendMail = async function (message) {
           if (err) {
             console.error(err);
             error("Failed to send mail");
-            message.handleError()
-          } else{
-            message.handleSuccess()
+            message.handleError();
+          } else {
+            message.handleSuccess();
             success("Email sent to:", info.messageId, "after failed trial ");
-         }   });
+          }
+        });
       } else {
-        message.handleSuccess()
+        message.handleSuccess();
         success("Email sent to:", infos.messageId);
       }
     });
