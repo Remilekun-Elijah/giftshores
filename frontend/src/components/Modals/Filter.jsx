@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from "react";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
@@ -13,30 +14,33 @@ import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
 import { Box } from "@mui/material";
 import countries from "../../utils/countries";
+import { useDispatch } from "react-redux";
+import { clearFilter, getReport } from "../../features/dashboardSlice";
+import { setPagination } from "../../features/dashboardSlice";
 
 // eslint-disable-next-line react/prop-types
-export default function FilterModal({ open, setOpen }) {
+export default function FilterModal({ open, setOpen, pagination }) {
   // const [] = React.useState(false);
+  const dispatch = useDispatch();
+  const handleFilter = (value, name) => {
+    dispatch(
+      setPagination({ filter: { ...pagination.filter, [name]: value } })
+    );
+  };
+
   return (
     <React.Fragment>
-      {/* <Button
-        variant="outlined"
-        color="neutral"
-        startDecorator={<Add />}
-        onClick={() => setOpen(true)}
-      >
-        New project
-      </Button> */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog>
-          <DialogTitle>Apply Filter</DialogTitle>
-          <DialogContent>
+          <DialogTitle>Filter By:</DialogTitle>
+          {/* <DialogContent className="text-sm hidden">
             Selected values are applied upon submission.
-          </DialogContent>
+          </DialogContent> */}
           <form
             onSubmit={(event) => {
               event.preventDefault();
               setOpen(false);
+              Promise.all([dispatch(getReport({}))]);
             }}
           >
             <Box spacing={2} className="gap-5 grid md:grid-cols-2 ">
@@ -45,7 +49,8 @@ export default function FilterModal({ open, setOpen }) {
                 <Select
                   placeholder="Select an option"
                   name="gender"
-                  required
+                  value={pagination.filter.gender}
+                  onChange={(e, value) => handleFilter(value, "gender")}
                   sx={{ minWidth: 150 }}
                 >
                   <Option value="male">Male</Option>
@@ -58,7 +63,8 @@ export default function FilterModal({ open, setOpen }) {
                 <Select
                   placeholder="Select an option"
                   name="country"
-                  required
+                  value={pagination.filter.country}
+                  onChange={(e, value) => handleFilter(value, "country")}
                   sx={{ minWidth: 150 }}
                 >
                   {countries.map((name) => (
@@ -74,7 +80,8 @@ export default function FilterModal({ open, setOpen }) {
                 <Select
                   placeholder="Select an option"
                   name="isSent"
-                  required
+                  value={pagination.filter.isSent}
+                  onChange={(e, value) => handleFilter(value, "isSent")}
                   sx={{ minWidth: 150 }}
                 >
                   <Option value={true}>Sent</Option>
@@ -87,15 +94,24 @@ export default function FilterModal({ open, setOpen }) {
                 <Select
                   placeholder="Select an option"
                   name="via"
-                  required
+                  value={pagination.filter.via}
+                  onChange={(e, value) => handleFilter(value, "via")}
                   sx={{ minWidth: 150 }}
                 >
                   <Option value="mail">Mail</Option>
                   <Option value="whatsapp">WhatsApp</Option>
                 </Select>
               </FormControl>
-              <FormControl></FormControl>
-              <Button type="submit">Submit</Button>
+              <Button className="md:order-1" type="submit">
+                Apply
+              </Button>
+              <Button
+                type="clear"
+                color="neutral"
+                onClick={() => dispatch(clearFilter())}
+              >
+                Clear
+              </Button>
             </Box>
           </form>
         </ModalDialog>

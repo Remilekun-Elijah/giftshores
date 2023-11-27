@@ -8,13 +8,14 @@ const validateUser = joi.object({
   email: joi.string().email({ minDomainSegments: 2 }),
   country: joi.string(),
   gender: joi.string(),
-  // purpose: joi.string(),
+  role: joi.string(),
 });
 
 exports.createUser = async (req, res, next) => {
   try {
+    req.body.role = req.body.role || "user";
     const payload = await validateUser.validateAsync(req.body);
-    const doc = await UserModel.create(payload);
+    const doc = await UserModel.create({ ...payload });
     if (doc) {
       res.json({
         success: true,
