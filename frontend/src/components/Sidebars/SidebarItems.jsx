@@ -17,7 +17,7 @@ const SidebarItems = ({ link }) => {
     dropdownActive = link?.dropdown?.find(({ url }) =>
       url === pathname ? true : pathname.indexOf(url) > -1 ? true : false
     ),
-    activeLink = pathname === link.url || pathname.includes(link.url);
+    activeLink = pathname === link.url;
 
   React.useEffect(() => {
     setOpen(dropdownActive ? true : false);
