@@ -201,10 +201,10 @@ exports.sendGiftTemplate = ({ purpose, name, gifts, host }) => {
         </tbody>
       </table>
     </div>
-    <!--[if mso | IE]></td></tr></table><table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><v:rect style="width:600px;" xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false"><v:fill origin="0, -0.5" position="0, -0.5" src="http://nimus.de/share/tpl-card/bg.jpg" type="frame" size="1,1" aspect="atleast" /><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0"><![endif]-->
-    <div style="background:url(http://nimus.de/share/tpl-card/bg.jpg) center top / cover no-repeat;background-position:center top;background-repeat:no-repeat;background-size:cover;margin:0px auto;max-width:600px;">
+    <!--[if mso | IE]></td></tr></table><table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" bgcolor="#eee"><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style="background:#eee;background-color:#eee;margin:0px auto;max-width:600px; color:black;">
       <div style="line-height:0;font-size:0;">
-        <table align="center" background="http://nimus.de/share/tpl-card/bg.jpg" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:url(http://nimus.de/share/tpl-card/bg.jpg) center top / cover no-repeat;background-position:center top;background-repeat:no-repeat;background-size:cover;width:100%;">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="color:black; background:#eee;background-color:#eee;width:100%;">
           <tbody>
             <tr>
               <td style="direction:ltr;font-size:0px;padding:0px;text-align:center;">
@@ -314,7 +314,7 @@ exports.sendGiftTemplate = ({ purpose, name, gifts, host }) => {
                   <tbody>
                     <tr>
                       <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                        <div style="font-family:Montserrat, Helvetica, Arial, sans-serif;font-size:11px;font-weight:400;line-height:24px;text-align:center;color:#9B9B9B;">52 Edison Court Suite 259 / East Aidabury / Cambodi<br /> <a href="#" style="color: #9B9B9B; text-decoration:none;">&copy; copyright GiftShore HQ </a></div>
+                        <div style="font-family:Montserrat, Helvetica, Arial, sans-serif;font-size:11px;font-weight:400;line-height:24px;text-align:center;color:#9B9B9B;"> <a href="#" style="color: #9B9B9B; text-decoration:none;">&copy; copyright GiftShore HQ </a></div>
                       </td>
                     </tr>
                   </tbody>

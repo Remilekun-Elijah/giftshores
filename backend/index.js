@@ -14,7 +14,7 @@ if (app.get("env") === "development") {
     path: path.join(__dirname, ".env"),
   });
 }
-// console.log(app.get("env"));
+
 app.use(
   express.json({
     limit: "50mb",

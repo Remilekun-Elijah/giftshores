@@ -10,7 +10,7 @@ exports.sendMail = async function (message) {
     application_name: "GIFT SHORES",
     smtp_host: process.env.SMTP_HOST,
   };
-  console.log(config);
+
   info("sending mail to", message.to + "...");
   const transporter = nodemailer.createTransport({
     service: "gmail",
