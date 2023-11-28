@@ -9,6 +9,7 @@ const returnSearch = (words) => {
   };
 };
 exports.getReport = async (req, res, next) => {
+
   let { search, pageSize, pageNumber, gender, country, isSent, via, ...date } =
     req.query;
 

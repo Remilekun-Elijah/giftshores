@@ -5,6 +5,12 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const text = [
+    "Create an amazing list of gifts you want",
+    "copying the emails of friends you want to",
+    "send them to in a very easy and convenient way.",
+  ];
+
   return (
     <div>
       <Navbar />
@@ -25,9 +31,9 @@ const Home = () => {
             />
             <div>
               <h1 className="lg:text-3xl md:text-2xl sm:text-lg font-[700] text-lg uppercase">
-                Creating gifts wish list
+                Creating wish list
               </h1>
-              <h1 className="lg:text-3xl md:text-2xl sm:text-lg text-lg uppercase">
+              <h1 className="lg:text-3xl md:text-2xl sm:text-lg font-[700] text-lg uppercase">
                 Just got easier
               </h1>
             </div>
@@ -67,17 +73,17 @@ const Home = () => {
                 height={"300px"}
               />
               <div className="text-lg">
-                <p>Create an amazing list of gifts you want</p>
-                <p>Copying the emails of friends you want to</p>
-                <p> send them to in a very easy and convenient way.</p>
+                {text.map((a) => (
+                  <p key={a}>{a}</p>
+                ))}
               </div>
             </div>
 
             <div className="flex items-center flex-wrap justify-center md:gap-10 gap-0 md:my-0 my-10">
               <div className="text-lg order-1 md:order-none">
-                <p>Create an amazing list of gifts you want</p>
-                <p>Copying the emails of friends you want to</p>
-                <p> send them to in a very easy and convenient way.</p>
+                {text.map((a) => (
+                  <p key={a}>{a}</p>
+                ))}
               </div>
               <img
                 src="/mail_friends.png"
@@ -95,9 +101,9 @@ const Home = () => {
                 height={"300px"}
               />
               <div className="text-lg">
-                <p>Create an amazing list of gifts you want</p>
-                <p>Copying the emails of friends you want to</p>
-                <p> send them to in a very easy and convenient way.</p>
+                {text.map((a) => (
+                  <p key={a}>{a}</p>
+                ))}
               </div>
             </div>
           </div>
@@ -115,7 +121,7 @@ const Home = () => {
             Create List
           </Button>
         </center>
-        <section className="bg-[#8D83B3] py-10 text-white text-center px-3">
+        <section className="bg-[#8D83B3] hidden py-10 text-white text-center px-3">
           <h2 className="lg:text-3xl md:text-2xl sm:text-lg text-lg">
             {" "}
             What Users are saying

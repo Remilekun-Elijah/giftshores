@@ -1,10 +1,4 @@
 const environment = {};
-// import process from "process";
-if (import.meta.env.MODE === "production") {
-  // your code here
-}
-
-// console.log(import.meta.env);
 
 const routes = {
   home: "/",

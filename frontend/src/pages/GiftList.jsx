@@ -232,9 +232,6 @@ Giftshores
                     variant="contained"
                     color="success"
                     onClick={handleShare}
-                    // target="_blank"
-                    // LinkComponent={Link}
-                    // to={whatsappUrl}
                     size="small"
                   >
                     <Avatar src="./whatsapp.png" /> Share on WhatsApp
