@@ -20,9 +20,14 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadModal from "../components/Modals/Download";
 import ViewModal from "../components/Modals/View";
+import { useNavigate } from "react-router-dom";
+import config from "../utils/config";
+import Storage from "../utils/storage";
 
 const Report = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(),
+    navigate = useNavigate();
+
   const {
       modalLoading,
       pagination,
@@ -36,6 +41,9 @@ const Report = () => {
 
   useEffect(() => {
     dispatch(setPagination({ page: 1, endDate: null }));
+
+    const nav = Storage.get(config.authProps[0]);
+    if (nav === null) navigate("/");
   }, []);
 
   useEffect(() => {

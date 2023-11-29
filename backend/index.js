@@ -1,19 +1,22 @@
 const express = require("express"),
-  json2xls = require("json2xls"),
-  cors = require("cors"),
-  apiVersion = "/v1",
-  route = require("./routes/index"),
-  app = express(),
   path = require("path"),
-  mongoose = require("mongoose"),
-  consola = require("consola"),
-  config = require("./config/index");
+  app = express();
 
 if (app.get("env") === "development") {
   require("dotenv").config({
     path: path.join(__dirname, ".env"),
   });
 }
+const json2xls = require("json2xls"),
+  cors = require("cors"),
+  apiVersion = "/v1",
+  route = require("./routes/index"),
+  mongoose = require("mongoose"),
+  consola = require("consola"),
+  config = require("./config/index");
+require("./config/loadSeeds");
+
+console.log(process.env.NODE_ENV);
 
 app.use(
   express.json({
@@ -75,13 +78,12 @@ const connect = async (conString) => {
         } else {
           consola.error("Failed to connect to MongoDB Atlas.");
           consola.info("Attempting to connect locally...");
-          // setTimeout(() => connect(config.mongodb_uri), 3000);
         }
       }
     });
 };
 connect(process.env.DB_URL);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 app.listen(port, () => {
   consola.info(`Server started on port ${port} 🚀`);
 });

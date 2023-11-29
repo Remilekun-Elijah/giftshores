@@ -31,6 +31,22 @@ export const createUser = createAsyncThunk(
   }
 );
 
+export const loginAdmin = createAsyncThunk(
+  "/user/loginAdmin",
+  async (payload, thunkAPI) => {
+    try {
+      return new BACKEND().send({
+        type: "post",
+        to: "/auth/login",
+        useAlert: true,
+        payload,
+      });
+    } catch (error) {
+      thunkAPI.rejectWithValue("An error occurred somewhere");
+    }
+  }
+);
+
 export const createGift = createAsyncThunk(
   "/user/createGift",
   async (payload, thunkAPI) => {
@@ -111,6 +127,23 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    /** loginAdmin Builder **/
+    builder
+      .addCase(loginAdmin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(loginAdmin.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        if (payload.success) {
+          Storage.set(config.authProps[0], payload?.data?.token);
+          Storage.set(config.authProps[1], payload?.data);
+        }
+      })
+      .addCase(loginAdmin.rejected, (state) => {
+        state.loading = false;
+      });
+    /** loginAdmin Builder |END| **/
+
     /** createUser Builder **/
     builder
       .addCase(createUser.pending, (state) => {

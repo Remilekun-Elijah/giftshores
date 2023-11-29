@@ -38,13 +38,13 @@ class API_INSTANCE {
         const msg = error?.response?.data?.message,
           message = msg instanceof Array ? msg[0] : msg;
         const isNotAuth = [
+          "Unauthorized user",
+          "Bad Token",
+          "No token provided",
           "authorization",
           "auth",
-          "authorized",
-          "access forbidden",
           "jwt expired",
           "jwt",
-          "Forbidden...You are using an expired token",
           "invalid signature",
         ].find(
           (msg) =>
@@ -54,13 +54,14 @@ class API_INSTANCE {
             message?.toLowerCase().includes(msg?.toLowerCase())
         );
         const cb = () =>
-            setTimeout(
-              (_) => (window.location.href = config.routes.login),
-              2000
-            ),
+            setTimeout(() => (window.location.href = config.routes.home), 1000),
           messages = "Session expired, please login again.";
 
-        if ([403].includes(error?.response?.status) && isNotAuth) {
+        if (
+          [403, 401].includes(error?.response?.status) &&
+          isNotAuth &&
+          window.location.href !== "/"
+        ) {
           Storage.remove(config.authProps[0]);
           Storage.remove(config.authProps[1]);
           Alert({ type: "error", message: messages, cb });

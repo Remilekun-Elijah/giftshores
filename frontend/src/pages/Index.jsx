@@ -1,14 +1,13 @@
 import config from "../utils/config";
 import Dashboard from "./Dashboard";
-import GiftList from "./GiftList";
-import Home from "./Home";
 import Report from "./Report";
+import Login from "./Login";
 
 const { routes } = config;
 const Pages = [
   {
-    path: routes.create,
-    element: <GiftList />,
+    path: routes.home,
+    element: <Login />,
   },
   {
     path: routes.dashboard,
