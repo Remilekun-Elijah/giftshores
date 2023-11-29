@@ -22,22 +22,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import LogoutIcon from "@mui/icons-material/Logout";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
-import { Stack } from "@mui/material";
-import Slide from "@mui/material/Slide";
-import { LoadingButton } from "@mui/lab";
-// import { loggedInUser } from "../utils/helper";
 import { logout } from "../features/userSlice";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { Button, Modal, ModalClose, ModalDialog } from "@mui/joy";
 
 const drawerWidth = 340;
 
@@ -58,19 +46,17 @@ export default function HomeSidebar(props) {
   const drawer = (
     <div>
       <Toolbar>
-        <div className="flex items-end mt-3">
-          {/* <Avatar src={IBrand} variant='square' height={'130px'} width={'60px'} className='mt-3 ml-7 rounded bg-transparent'> */}
+        <div className="flex items-center mt-3">
           <img
             src={"/logo.png"}
             alt="brand"
             className="shadow bg-white p-2 rounded"
             height={"130px"}
             width={"60px"}
-          />
-          {/* </Avatar> */}
+          />{" "}
           <h2
             style={{ color: "white" }}
-            className="ml-5 text-2xl mt-4 uppercase sofiaProBold"
+            className="ml-5 text-2xl uppercase sofiaProBold"
           >
             GIFTSHORES
           </h2>
@@ -106,8 +92,6 @@ export default function HomeSidebar(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -217,68 +201,37 @@ export default function HomeSidebar(props) {
         {children}
       </Box>
 
-      {logouts && (
-        <Dialog
-          fullScreen={fullScreen}
-          open={logouts}
-          onClose={() => setLogout(false)}
-          aria-labelledby="responsive-dialog-title"
-          className="p-20"
-          sx={{ zIndex: 5000 }}
-          TransitionComponent={Transition}
-        >
-          <DialogTitle
-            id="responsive-dialog-title"
-            display="flex"
-            justifyContent="center"
-            mt="0em"
-          ></DialogTitle>
-          <DialogContent>
-            <Typography textAlign="center" fontSize="32px">
-              Log Out
-            </Typography>
-            <DialogContentText fontSize="20px" padding=".5em 1em" mb={"20px"}>
-              Are you sure you want to logout?
-            </DialogContentText>
-            <Stack spacing={7} direction="row" className="normal-case">
-              <Button
-                className="normal-case"
-                fullWidth
-                sx={{
-                  color: "var(--c-primary-0)",
-                  borderRadius: "10px",
-                  bgcolor: "var(--c-primary-1)",
-                  "&:hover": {
-                    color: "white",
-                    bgcolor: "var(--c-danger-3) !important",
-                  },
-                }}
-                size="large"
-                onClick={() => setLogout(false)}
-                variant="text"
-              >
-                <span className="normal-case">Cancel</span>
-              </Button>
-
-              <LoadingButton
-                className="normal-case"
-                fullWidth
-                sx={{
-                  borderRadius: "10px",
-                  bgcolor: "var(--c-primary-0)",
-                  color: "white",
-                  "&:hover": { background: "#FF5C5C" },
-                }}
-                size="large"
-                variant="contained"
-                onClick={handleLogout}
-              >
-                Log Out
-              </LoadingButton>
-            </Stack>
+      <Modal open={logouts} onClose={() => setLogout(false)}>
+        <ModalDialog size={"sm"} className="w-full" maxWidth={"400px"}>
+          <ModalClose />
+          <DialogTitle className="border-b text-center">LOG OUT</DialogTitle>
+          <DialogContent className="mt-5 text-lg text-center">
+            {" "}
+            Are you sure you want to logout?
           </DialogContent>
-        </Dialog>
-      )}
+
+          <Box className="gap-3 grid md:grid-cols-2 ">
+            <Button
+              sx={{
+                background: "#333",
+                "&:hover": { background: "#222" },
+              }}
+              onClick={() => setLogout(false)}
+            >
+              No
+            </Button>
+            <Button
+              sx={{
+                background: "var(--c-primary-0)",
+                "&:hover": { background: "var(--c-primary-1)" },
+              }}
+              onClick={handleLogout}
+            >
+              Yes
+            </Button>
+          </Box>
+        </ModalDialog>
+      </Modal>
     </Box>
   );
 }

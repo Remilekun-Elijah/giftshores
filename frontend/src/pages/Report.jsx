@@ -78,7 +78,7 @@ const Report = () => {
 
   const setDate = (date) => {
     const [start, end] = date;
-    dispatch(setPagination({ startDate: start, endDate: end }));
+    dispatch(setPagination({ page: 1, startDate: start, endDate: end }));
   };
 
   const dropdownData = {
@@ -112,7 +112,7 @@ const Report = () => {
               {...{
                 value: pagination.search,
                 onChange: ({ target: { value } }) =>
-                  dispatch(setPagination({ search: value.trim() })),
+                  dispatch(setPagination({ page: 1, search: value.trim() })),
                 placeholder: "Search by name...",
               }}
             />

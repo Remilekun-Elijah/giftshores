@@ -2,7 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-// import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import config from "../utils/config";
 import { Avatar } from "@mui/material";
 import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
@@ -64,7 +64,7 @@ const Navbar = () => {
             GIFTSHORES
           </Typography>
 
-          {pathname === "/" && (
+          {pathname === "/" && config.appType === "user" && (
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -134,7 +134,7 @@ const Navbar = () => {
           </Typography>
           {/* </div> */}
 
-          {pathname === "/" && (
+          {pathname === "/" && config.appType === "user" && (
             <Box
               sx={{
                 flexGrow: 1,

@@ -40,7 +40,8 @@ export const getRole = () => {
   if (loggedInUser) {
     user = JSON.parse(loggedInUser);
   }
-  return user?.role?.[0];
+  console.log(user);
+  return user?.role;
 };
 export const getIds = () => {
   let user = {};
@@ -48,10 +49,7 @@ export const getIds = () => {
     user = JSON.parse(loggedInUser);
   }
   return {
-    company: user.companies[0].id,
-    hmo: user.hmos[0].id,
-    hospital: user.hospitals[0].id,
-    user: user.id,
+    user: user?._id,
   };
 };
 
@@ -101,27 +99,26 @@ export const getMdaIdByName = (name, departments) =>
     (branch) => branch?.department?.toLowerCase() === name?.toLowerCase()
   )?.id;
 
-
-  export const purposeList = [
-    "Anniversary",
-    "Birthday",
-    "Christmas",
-    "Valentine",
-    "Housewarming",
-    "Baby shower",
-    "Diwali",
-    "Eid",
-    "Father's day",
-    "Mother's day",
-    "New year",
-    "Wedding",
-    "Bridal shower",
-    "Halloween",
-    "Chinese New year",
-    "Christening",
-    "Easter",
-    "Hanukkah",
-    "New baby",
-    "Thanksgiving",
-    "Others",
-  ]
+export const purposeList = [
+  "Anniversary",
+  "Birthday",
+  "Christmas",
+  "Valentine",
+  "Housewarming",
+  "Baby shower",
+  "Diwali",
+  "Eid",
+  "Father's day",
+  "Mother's day",
+  "New year",
+  "Wedding",
+  "Bridal shower",
+  "Halloween",
+  "Chinese New year",
+  "Christening",
+  "Easter",
+  "Hanukkah",
+  "New baby",
+  "Thanksgiving",
+  "Others",
+];

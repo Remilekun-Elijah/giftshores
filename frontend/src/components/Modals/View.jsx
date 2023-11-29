@@ -1,18 +1,14 @@
 /* eslint-disable react/prop-types */
 import * as React from "react";
-import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import ModalDialog from "@mui/joy/ModalDialog";
 import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
 import { getByStatusText } from "../../utils/color.util";
 import dayjs from "dayjs";
 
 export default function SizeModalDialog({ open, setOpen, data }) {
-  console.log(data);
-
   const mapData = (items) => {
     return items?.length > 0
       ? items?.map((item, idx) => {

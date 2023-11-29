@@ -52,7 +52,7 @@ app.use("*", (req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.status(500).json({
-    success: true,
+    success: false,
     message: "Internal server error",
     error: err.message,
     stack: err.stack,
