@@ -19,7 +19,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import { logout } from '../../features/auth/authSlice';
 import { useDispatch } from "react-redux";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -30,10 +29,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-// import { Avatar, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import Slide from "@mui/material/Slide";
 import { LoadingButton } from "@mui/lab";
-import { loggedInUser } from "../utils/helper";
+// import { loggedInUser } from "../utils/helper";
+import { logout } from "../features/userSlice";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -48,13 +48,12 @@ export default function HomeSidebar(props) {
   const dispatch = useDispatch(),
     navigate = useNavigate(),
     handleLogout = () => {
-      // dispatch(logout());
+      dispatch(logout());
       navigate("/");
     },
     handleDrawerToggle = () => {
       setMobileOpen(!phoneNumberOpen);
-    },
-    user = JSON.parse(loggedInUser);
+    };
 
   const drawer = (
     <div>

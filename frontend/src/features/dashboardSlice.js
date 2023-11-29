@@ -120,7 +120,7 @@ export const dashboardSlice = createSlice({
         if (payload?.success) {
           state.reports = payload?.data?.reports;
 
-          state.pagination.total = payload.data.count;
+          state.pagination.total = payload?.data?.count;
           state.pagination.length =
             state.pagination.pageSize * state.pagination.page;
         }

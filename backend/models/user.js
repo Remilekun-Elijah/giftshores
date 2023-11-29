@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     password: String,
     gender: String,
     role: String,
+    lastLogin: Date
   },
   { timestamps: true }
 );

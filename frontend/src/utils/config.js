@@ -2,7 +2,7 @@ const environment = {};
 
 const routes = {
   home: "/",
-  dashboard: "/",
+  dashboard: "/dashboard",
   create: "/create-list",
   user: "/users",
   report: "/reports",

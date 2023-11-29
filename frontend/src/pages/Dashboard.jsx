@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { Skeleton, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import config from "../utils/config";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Table from "../components/table/Table";
 import TablePreloader from "../components/Loader/TablePreloader";
@@ -24,11 +24,13 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { capitalize, getAmount } from "../utils/helper";
+import Storage from "../utils/storage";
 
 const { routes } = config;
 export default function Dashboard() {
   const { loading, pagination, modalLoading, reports, analytics, stats } =
       useSelector(getDashboardData),
+    navigate = useNavigate(),
     dispatch = useDispatch();
 
   const statsMap = [
@@ -69,6 +71,10 @@ export default function Dashboard() {
       dispatch(getReport({ pageSize: 5 })),
       dispatch(getDashboardStats()),
     ]);
+
+    const nav = Storage.get(config.authProps[0]);
+
+    if (nav === null) navigate("/");
   }, []);
 
   const data = reports?.map(({ createdAt, owner, isSent, via }) => ({

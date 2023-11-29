@@ -3,17 +3,15 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Pages from "./pages/Index";
 import config from "./utils/config";
-import ProtectedRoutes from "./components/others/ProtectedRoutes";
+// import ProtectedRoutes from "./components/others/ProtectedRoutes";
 import Home from "./pages/Home";
 // import StylishMouseMovent from "./components/others/StylishMouseMovement";
 import { Button } from "@mui/material";
-import Dashboard from "./pages/Dashboard";
+// import Dashboard from "./pages/Dashboard";
 import GiftList from "./pages/GiftList";
 
 function App() {
   const { routes } = config;
-  window.addEventListener("offline", () => console.log("offline"));
-  window.addEventListener("online", () => console.log("online"));
 
   function ScrollToTop() {
     const { pathname } = useLocation();
@@ -51,9 +49,9 @@ function App() {
               {Pages.map((p, i) => (
                 <Route key={i} {...p} />
               ))}
+              {/* </Route> */}
             </>
           )}
-          {/* </Route> */}
           {/* </Routes> */}
           {/* <StylishMouseMovent /> */}
 
@@ -71,7 +69,7 @@ function App() {
                   wrapperClass={"mt-10"}
                   width={"260px"}
                   value={"Go Back Home"}
-                  onClick={(_) => (window.location.href = "/")}
+                  onClick={() => (window.location.href = "/")}
                 />
               </div>
             }

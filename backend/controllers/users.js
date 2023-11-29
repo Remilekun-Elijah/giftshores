@@ -1,15 +1,62 @@
-const { HTTP_UNPROCESSABLE_ENTITY } = require("../config/http.status.code");
+const {
+  HTTP_UNPROCESSABLE_ENTITY,
+  HTTP_BAD_REQUEST,
+  HTTP_OK,
+  HTTP_NOT_FOUND,
+} = require("../config/http.status.code");
 const { sendMail } = require("../config/mail");
 const { UserModel, GiftModel } = require("../models/user");
 const joi = require("joi");
 const validateUser = joi.object({
-  firstName: joi.string().min(3).max(100).required(),
-  lastName: joi.string().min(3).max(100),
-  email: joi.string().email({ minDomainSegments: 2 }),
-  country: joi.string(),
-  gender: joi.string(),
-  role: joi.string(),
-});
+    firstName: joi.string().min(3).max(100).required(),
+    lastName: joi.string().min(3).max(100),
+    email: joi.string().email({ minDomainSegments: 2 }),
+    country: joi.string(),
+    gender: joi.string(),
+    role: joi.string(),
+  }),
+  dayjs = require("dayjs"),
+  helper = require("../config/helper");
+
+exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    let user = await UserModel.findOne({ email });
+
+    if (user) {
+      const iscorrect = helper.comparePassword(user.password, password);
+      if (iscorrect) {
+        const token = helper.generateUserToken(user._id, user.role);
+
+        // update last login
+        await UserModel.findByIdAndUpdate(user._id, {
+          lastLogin: dayjs(new Date()).format("YYYY-MM-DD HH:mm"),
+        });
+
+        res.status(HTTP_OK).json({
+          success: true,
+          message: "Logged in successfully",
+          data: {
+            token,
+            user,
+          },
+        });
+      } else {
+        res.status(HTTP_BAD_REQUEST).json({
+          success: false,
+          message: "Username or password is incorrect",
+        });
+      }
+    } else {
+      res.status(HTTP_NOT_FOUND).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.createUser = async (req, res, next) => {
   try {
@@ -29,17 +76,14 @@ exports.createUser = async (req, res, next) => {
       });
     }
   } catch (err) {
-    let message = err?.message;
-    console.log(err);
     if (err.details) {
-      message = err.details?.[0]?.message;
-    }
+      res.json({
+        success: false,
+        code: HTTP_UNPROCESSABLE_ENTITY,
+        error: err.details?.[0]?.message,
+      });
+    } else next(err);
     //  respond with error to the client
-    res.json({
-      success: false,
-      code: HTTP_UNPROCESSABLE_ENTITY,
-      error: message,
-    });
   }
 };
 
