@@ -3,13 +3,9 @@ import * as React from "react";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
-import Input from "@mui/joy/Input";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
-import Stack from "@mui/joy/Stack";
-// import Add from "@mui/icons-material/Add";
 import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
 import { Box } from "@mui/material";
@@ -20,7 +16,6 @@ import { setPagination } from "../../features/dashboardSlice";
 
 // eslint-disable-next-line react/prop-types
 export default function FilterModal({ open, setOpen, pagination }) {
-  // const [] = React.useState(false);
   const dispatch = useDispatch();
   const handleFilter = (value, name) => {
     dispatch(
@@ -33,9 +28,6 @@ export default function FilterModal({ open, setOpen, pagination }) {
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog>
           <DialogTitle>Filter By:</DialogTitle>
-          {/* <DialogContent className="text-sm hidden">
-            Selected values are applied upon submission.
-          </DialogContent> */}
           <form
             onSubmit={(event) => {
               event.preventDefault();

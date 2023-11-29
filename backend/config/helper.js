@@ -3,14 +3,13 @@ const jwt = require("jsonwebtoken"),
   secret = process.env.SMTP_SECRET,
   saltRounds = 10;
 
-console.log(secret);
 exports.generateUserToken = (id, role) => {
   let data = {
     id,
     role,
   };
   const token = jwt.sign(data, secret, {
-    expiresIn: "1m",
+    expiresIn: "3d",
   });
   return `Bearer ${token}`;
 };

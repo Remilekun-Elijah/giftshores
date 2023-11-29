@@ -72,7 +72,7 @@ const GiftList = () => {
       validationSchema: vCreateUser,
       initialValues: payload,
       // eslint-disable-next-line no-unused-vars
-      onSubmit: async ({ purpose, others, ...values }) => {
+      onSubmit: async ({ purpose, others, gifts, recipients, ...values }) => {
         const res = await dispatch(createUser(values)).unwrap();
         res.success && setStep(step + 1);
       },

@@ -16,14 +16,18 @@ export default function Login() {
   const dispatch = useDispatch();
   const { loading } = useSelector(getUserData);
   const formik = useFormik({
-    initialValues: { email: "", password: "" },
+    initialValues: {
+      email: "remilekunelijah97@gmail.com",
+      password: "09023007389",
+    },
     validationSchema: vAdminLogin,
     onSubmit: async (values) => {
       try {
         const res = await dispatch(
           loginAdmin({ ...values, email: values.email.toLowerCase() })
         ).unwrap();
-        if (res.success) window.location.href = config.routes.dashboard;
+        if (res.success === true)
+          window.location.href = config.routes.dashboard;
       } catch (err) {
         console.error(err);
         Alert({ type: "error", message: "Something went wrong" });
@@ -42,14 +46,14 @@ export default function Login() {
           className="border p-3 rounded"
         >
           <DialogTitle>Login</DialogTitle>
-          <Typography className="py-1 text-sm">
+          <Typography className="py-1 mb-4 text-gray-700 text-sm">
             Enter your username and password.
           </Typography>
           <Stack spacing={3}>
             <div className="">
               <label
                 htmlFor="email"
-                className="block mb-2 text-[16px] font-medium  text-[#090914]"
+                className="block text-[16px] font-medium  text-[#090914]"
               >
                 Username
               </label>
@@ -59,7 +63,7 @@ export default function Login() {
                 name="email"
                 id="email"
                 sx={{ ".MuiInputBase-root": { height: "45px" } }}
-                className="block w-full  text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-3 sm:text-sm sm:leading-6"
+                className="border-0 w-full text-gray-900 placeholder:text-gray-400"
                 placeholder=""
                 required
                 onChange={formik.handleChange}
@@ -80,7 +84,7 @@ export default function Login() {
                 }}
               />
             </div>
-            <div className="mt-">
+            <div>
               <label
                 htmlFor="password"
                 className="block text-[16px] font-medium  text-[#090914]"
@@ -108,13 +112,23 @@ export default function Login() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <LockIcon />
+                      <LockIcon className="" />
                     </InputAdornment>
                   ),
                 }}
               />
             </div>
-            <LoadingButton variant="contained" {...{ loading }} type="submit">
+            <LoadingButton
+              variant="contained"
+              {...{
+                loading,
+                sx: {
+                  bgcolor: "var(--c-primary-1)",
+                  "&:hover": { bgcolor: "var(--c-primary-0)" },
+                },
+              }}
+              type="submit"
+            >
               Submit
             </LoadingButton>
           </Stack>
