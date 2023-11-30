@@ -17,8 +17,8 @@ export default function Login() {
   const { loading } = useSelector(getUserData);
   const formik = useFormik({
     initialValues: {
-      email: "remilekunelijah97@gmail.com",
-      password: "09023007389",
+      email: "",
+      password: "",
     },
     validationSchema: vAdminLogin,
     onSubmit: async (values) => {
