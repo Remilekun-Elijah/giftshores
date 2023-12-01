@@ -1,3 +1,5 @@
+const { log } = require("console");
+
 const express = require("express"),
   path = require("path"),
   app = express();
@@ -15,7 +17,7 @@ const json2xls = require("json2xls"),
   mongoose = require("mongoose"),
   consola = require("consola"),
   config = require("./config/index");
-require("./config/loadSeeds");
+// require("./config/loadSeeds");
 
 console.log(process.env.NODE_ENV);
 
@@ -59,32 +61,22 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 });
-let retry = 0;
 
 const connect = async (conString) => {
   consola.info("Initiating MongoDB connection...");
-
-  return mongoose
-    .connect(conString)
-    .then((doc) => {
-      consola.success(`Mongodb connected successfully from 🚀`);
-    })
-    .catch((err) => {
-      if (err) {
-        if (retry < 3) {
-          retry++;
-          if (retry > 1) consola.info("Retrying again in 5 seconds...");
-          else consola.info("Retrying in 5 seconds...");
-          setTimeout(() => connect(conString || config.mongodb_uri), 2000);
-        } else {
-          consola.error("Failed to connect to MongoDB Atlas.");
-          consola.info("Attempting to connect locally...");
-        }
-      }
-    });
+  try {
+    const conn = await mongoose.connect(conString);
+    consola.success(`MongoDB Connected: ${conn.connection.host} 🚀`);
+  } catch (err) {
+    console.log(err);
+    consola.error("Failed to connect to MongoDB Atlas.");
+    process.exit(1);
+  }
 };
-connect(config.dbUrl);
-const port = process.env.PORT || 9000;
-app.listen(port, () => {
-  consola.info(`Server started on port ${port} 🚀`);
+
+connect(config.dbUrl).then((con) => {
+  const port = process.env.PORT || 9000;
+  app.listen(port, () => {
+    consola.success(`Server started on port ${port} 🚀`);
+  });
 });
