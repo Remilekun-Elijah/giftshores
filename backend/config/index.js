@@ -1,4 +1,6 @@
-exports.dbUrl = process.env.DB_URL;
+exports.dbUrl =
+  process.env.DB_URL ||
+  "mongodb+srv://remilekunelijah:09023007389@prod.cudwsqi.mongodb.net/giftshores";
 exports.smtp_secret = process.env.SMTP_SECRET || "wusoofbqxubyuwlp";
 exports.smtp_user = process.env.SMTP_USER || "giftshores@gmail.com";
 exports.smtp_from = process.env.SMTP_FROM || "giftshores@gmail.com";
