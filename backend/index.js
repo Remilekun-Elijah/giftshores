@@ -2,11 +2,12 @@ const express = require("express"),
   path = require("path"),
   app = express();
 
-if (app.get("env") === "development") {
-  require("dotenv").config({
-    path: path.join(__dirname, ".env"),
-  });
-}
+// if (app.get("env") === "development") {
+//   require("dotenv").config({
+//     path: path.join(__dirname, ".env"),
+//   });
+// }
+
 const json2xls = require("json2xls"),
   cors = require("cors"),
   apiVersion = "/v1",
@@ -82,8 +83,8 @@ const connect = async (conString) => {
       }
     });
 };
-connect(process.env.DB_URL);
-const port = process.env.PORT;
+connect(config.dbUrl);
+const port = process.env.PORT || 9000;
 app.listen(port, () => {
   consola.info(`Server started on port ${port} 🚀`);
 });
