@@ -1,17 +1,19 @@
-const path = require("path");
 const nodemailer = require("nodemailer");
 const { info, error, success } = require("consola");
 const { sendGiftTemplate } = require("../email/gift");
-exports.sendMail = async function (message) {
-  const config = {
-    smtp_secret: process.env.SMTP_SECRET,
-    smtp_user: process.env.SMTP_USER,
-    smtp_from: process.env.SMTP_FROM,
-    application_name: "GIFT SHORES",
-    smtp_host: process.env.SMTP_HOST,
-  };
+const config = require("../config/index");
 
-  info("sending mail to", message.to + "...");
+exports.sendMail = async function (message) {
+  config
+    // const config = {
+    //   smtp_secret: process.env.SMTP_SECRET,
+    //   smtp_user: process.env.SMTP_USER,
+    //   smtp_from: process.env.SMTP_FROM,
+    //   application_name: "GIFT SHORES",
+    //   smtp_host: process.env.SMTP_HOST,
+    // };
+
+    .info("sending mail to", message.to + "...");
   const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465, // 587 465
