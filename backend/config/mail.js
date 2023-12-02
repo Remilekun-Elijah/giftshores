@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { info, error, success } = require("consola");
+const { info, error, log } = console;
 const { sendGiftTemplate } = require("../email/gift");
 const config = require("../config/index");
 
@@ -50,12 +50,12 @@ exports.sendMail = async function (message) {
             message.handleError();
           } else {
             message.handleSuccess();
-            success("Email sent to:", info.messageId, "after failed trial ");
+            log("Email sent to:", info.messageId, "after failed trial ");
           }
         });
       } else {
         message.handleSuccess();
-        success("Email sent to:", infos.messageId);
+        log("Email sent to:", infos.messageId);
       }
     });
   } catch (e) {

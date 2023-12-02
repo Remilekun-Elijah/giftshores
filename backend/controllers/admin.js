@@ -9,13 +9,14 @@ const returnSearch = (words) => {
   };
 };
 exports.getReport = async (req, res, next) => {
-
   let { search, pageSize, pageNumber, gender, country, isSent, via, ...date } =
-    req.query;
+      req.query,
+    firstName,
+    lastName;
 
-  const firstName = search && returnSearch(search?.split(" ")[0] || ""),
-    lastName =
-      search?.split(" ")[1] && returnSearch(search?.split(" ")[1] || "");
+  if (search) firstName = returnSearch(search.split(" ")[0] || "");
+  if (search)
+    lastName = search.split(" ")[1] && returnSearch(search.split(" ")[1] || "");
 
   pageSize = pageSize || Infinity;
   pageNumber = pageNumber > 0 ? pageNumber - 1 : 0;
@@ -69,7 +70,6 @@ exports.getReport = async (req, res, next) => {
 
   if (req.query.download) {
     const jsonArr = docs.map(({ owner, _doc }) => {
-    
       return {
         NAME: owner.firstName + " " + owner.lastName,
         "EMAIL ADDRESS": owner.email,

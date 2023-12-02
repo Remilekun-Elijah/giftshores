@@ -50,7 +50,7 @@ giftSchema.methods.findByGenderOrCountry = async (
 ) => {
   const docs = await this.UserModel.find(filterA);
   const query = {
-    owner: { $in: docs?.map((d) => d?._id) },
+    owner: { $in: docs.map((d) => d._id) },
     ...filterB,
   };
   const result = await this.GiftModel.find(query)
