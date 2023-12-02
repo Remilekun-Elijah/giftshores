@@ -15,9 +15,8 @@ const json2xls = require("json2xls"),
   apiVersion = "/v1",
   route = require("./routes/index"),
   mongoose = require("mongoose"),
-  consola = require("consola"),
   config = require("./config/index");
-// require("./config/loadSeeds");
+require("./config/loadSeeds");
 
 console.log(process.env.NODE_ENV);
 
@@ -63,13 +62,13 @@ app.use((err, req, res, next) => {
 });
 
 const connect = async (conString) => {
-  consola.info("Initiating MongoDB connection...");
+  console.info("Initiating MongoDB connection...");
   try {
     const conn = await mongoose.connect(conString);
-    consola.success(`MongoDB Connected: ${conn.connection.host} 🚀`);
+    console.log(`MongoDB Connected: ${conn.connection.host} 🚀`);
   } catch (err) {
     console.log(err);
-    consola.error("Failed to connect to MongoDB Atlas.");
+    console.error("Failed to connect to MongoDB Atlas.");
     process.exit(1);
   }
 };
@@ -77,6 +76,6 @@ const connect = async (conString) => {
 connect(config.dbUrl).then((con) => {
   const port = process.env.PORT || 9000;
   app.listen(port, () => {
-    consola.success(`Server started on port ${port} 🚀`);
+    console.log(`Server started on port ${port} 🚀`);
   });
 });

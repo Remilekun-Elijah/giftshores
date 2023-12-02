@@ -80,7 +80,7 @@ exports.createUser = async (req, res, next) => {
       res.json({
         success: false,
         code: HTTP_UNPROCESSABLE_ENTITY,
-        error: err.details?.[0]?.message,
+        error: err.details[0].message,
       });
     } else next(err);
     //  respond with error to the client
@@ -97,7 +97,7 @@ exports.createGifts = async (req, res, next) => {
     const payload = req.body,
       { userId } = req.params;
 
-    if (payload.gifts && payload?.gifts?.length) {
+    if (payload.gifts && payload.gifts.length) {
       const doc = await GiftModel.create({ ...payload, owner: userId });
       if (doc) {
         res.json({
@@ -118,7 +118,7 @@ exports.createGifts = async (req, res, next) => {
       });
     }
   } catch (err) {
-    let message = err?.message;
+    let message = err.message;
     //  respond with error to the client
     res.json({
       success: false,
@@ -141,7 +141,7 @@ exports.sendGift = async (req, res, next) => {
         via: "whatsapp",
       });
     }
-    if (recipients?.length) {
+    if (recipients.length) {
       await GiftModel.findByIdAndUpdate(giftId, {
         recipients,
       });
