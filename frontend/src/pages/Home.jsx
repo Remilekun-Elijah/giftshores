@@ -1,14 +1,13 @@
 import { Avatar, Box, Button } from "@mui/material";
 import Navbar from "../components/Navbar";
-import gsap from "gsap";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   const text = [
-    "Create an amazing list of gifts you want",
-    "copying the emails of friends you want to",
-    "send them to in a very easy and convenient way.",
+    "Create your wishlist",
+    "Share with friends and family in an easy and convenient way",
+    "Every gift from a friend is a wish for your happiness",
   ];
 
   return (

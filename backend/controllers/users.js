@@ -130,7 +130,7 @@ exports.createGifts = async (req, res, next) => {
 
 exports.sendGift = async (req, res, next) => {
   const { giftId } = req.params,
-    { recipients, url } = req.body,
+    { recipients } = req.body,
     { type } = req.query;
   try {
     const gift = await getGiftById(giftId);
@@ -141,7 +141,7 @@ exports.sendGift = async (req, res, next) => {
         via: "whatsapp",
       });
     }
-    if (recipients.length) {
+    if (recipients?.length) {
       await GiftModel.findByIdAndUpdate(giftId, {
         recipients,
       });
