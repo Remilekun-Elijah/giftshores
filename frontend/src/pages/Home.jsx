@@ -72,17 +72,13 @@ const Home = () => {
                 height={"300px"}
               />
               <div className="text-lg">
-                {text.map((a) => (
-                  <p key={a}>{a}</p>
-                ))}
+                <p>{text[0]}</p>
               </div>
             </div>
 
             <div className="flex items-center flex-wrap justify-center md:gap-10 gap-0 md:my-0 my-10">
               <div className="text-lg order-1 md:order-none">
-                {text.map((a) => (
-                  <p key={a}>{a}</p>
-                ))}
+                <p>{text[1]}</p>
               </div>
               <img
                 src="/mail_friends.png"
@@ -100,9 +96,7 @@ const Home = () => {
                 height={"300px"}
               />
               <div className="text-lg">
-                {text.map((a) => (
-                  <p key={a}>{a}</p>
-                ))}
+                <p>{text[2]}</p>
               </div>
             </div>
           </div>
