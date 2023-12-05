@@ -141,7 +141,7 @@ exports.sendGift = async (req, res, next) => {
         via: "whatsapp",
       });
     }
-    if (recipients?.length) {
+    if (recipients && recipients.length) {
       await GiftModel.findByIdAndUpdate(giftId, {
         recipients,
       });
