@@ -4,7 +4,7 @@ const { sendGiftTemplate } = require("../email/gift");
 const config = require("../config/index");
 
 exports.sendMail = async function (message) {
-  config
+  // config
     // const config = {
     //   smtp_secret: process.env.SMTP_SECRET,
     //   smtp_user: process.env.SMTP_USER,
@@ -13,7 +13,7 @@ exports.sendMail = async function (message) {
     //   smtp_host: process.env.SMTP_HOST,
     // };
 
-    .info("sending mail to", message.to + "...");
+    info("sending mail to", message.to + "...");
   const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465, // 587 465
