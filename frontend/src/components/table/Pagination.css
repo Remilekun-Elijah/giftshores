@@ -24,7 +24,7 @@
 
 .pagination :where(.active) {
   background-color: var(--c-primary-1) !important;
-  color: var(--c-primary-0) !important;
+  color: white !important;
   border-color: var(--c-primary-0) !important;
   z-index: 100;
 }
