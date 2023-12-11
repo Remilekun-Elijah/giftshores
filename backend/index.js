@@ -1,14 +1,5 @@
-const { log } = require("console");
-
 const express = require("express"),
-  path = require("path"),
   app = express();
-
-// if (app.get("env") === "development") {
-//   require("dotenv").config({
-//     path: path.join(__dirname, ".env"),
-//   });
-// }
 
 const json2xls = require("json2xls"),
   cors = require("cors"),
@@ -34,7 +25,7 @@ app.use(
 
 app.use(cors("*"));
 
-app.get(apiVersion, (req, res, next) => {
+app.get("/", (req, res, next) => {
   res.json({
     name: "Giftshores Service",
     version: "1.0.0",

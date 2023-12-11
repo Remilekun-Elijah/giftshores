@@ -118,13 +118,8 @@ exports.createGifts = async (req, res, next) => {
       });
     }
   } catch (err) {
-    let message = err.message;
     //  respond with error to the client
-    res.json({
-      success: false,
-      code: HTTP_UNPROCESSABLE_ENTITY,
-      error: message,
-    });
+    next(err);
   }
 };
 
