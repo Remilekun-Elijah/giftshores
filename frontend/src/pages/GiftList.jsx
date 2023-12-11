@@ -46,7 +46,7 @@ const steps = [
 ];
 
 const GiftList = () => {
-  let { payload, loading, modalLoading } = useSelector(getUserData),
+  const { payload, loading, modalLoading } = useSelector(getUserData),
     navigate = useNavigate(),
     payload_t = {};
 
@@ -463,7 +463,7 @@ Giftshores
                   )}
                 </FormControl>
                 <LoadingButton
-                  {...{ loading }}
+                  loading={loading}
                   endIcon={<EastIcon />}
                   variant="text"
                   type="submit"
