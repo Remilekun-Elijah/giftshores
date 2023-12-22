@@ -17,15 +17,9 @@ exports.sendMail = async function (message) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465, // 587 465
-    _auth: {
+    auth: {
       user: config.smtp_user,
       pass: config.smtp_secret,
-    },
-    get auth() {
-      return this._auth;
-    },
-    set auth(value) {
-      this._auth = value;
     },
   });
   const packet = {
