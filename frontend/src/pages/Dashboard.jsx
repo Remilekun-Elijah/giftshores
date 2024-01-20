@@ -102,7 +102,7 @@ export default function Dashboard() {
           Overview
         </Typography>
 
-        <Box className="grid  xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2  gap-10 flex-wrap mb-14">
+        <Box className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-10 flex-wrap mb-14">
           {loading
             ? Array(5)
                 .fill("")
